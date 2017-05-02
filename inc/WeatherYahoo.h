@@ -5,7 +5,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 
-class WeatherOWM :public WeatherAPI
+class WeatherYahoo :public WeatherAPI
 {
 
 	public:

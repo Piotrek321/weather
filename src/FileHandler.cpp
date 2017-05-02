@@ -1,4 +1,4 @@
-#include "../inc/fileHandler.h"
+#include "../inc/FileHandler.h"
 
 	FileHandler::~FileHandler()
 	{
@@ -49,7 +49,7 @@
 /*
 int main(){
 	FileHandler fh("test.txt");
-	fh.printFile();
+	fh.readFileToString();
   std::string a;
 std::cout << fh.readFileToString();
 

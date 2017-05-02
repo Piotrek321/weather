@@ -1,6 +1,6 @@
-#include "../inc/plotter.h"
+#include "../inc/Plotter.h"
 
-void Plotter::plotChart(Gnuplot &gp, std::vector<int> valuesToPlot, std::vector<std::pair<int,int>> dataToPlot )
+void Plotter::plotChart(Gnuplot &gp)
 {
   gp << " set xdata time\n";
   //gp << "set yrange [0:22]\n";
@@ -23,3 +23,11 @@ void Plotter::init()
   SharedMemoryPTR  = (int *) shmat(SharedMemoryID, NULL, 0);
   pid     	       = *SharedMemoryPTR;  
 }
+/*
+int main()
+{
+Plotter a;
+a.init();
+return 1;
+}
+*/
