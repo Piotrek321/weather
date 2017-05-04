@@ -63,7 +63,7 @@
 		std::cout << line << " was not found in " << fileName << "\n";
 		return "";
 	};
-
+/*
 int main(){
 	FileHandler fh("test.txt");
 	fh.openFile();
@@ -75,4 +75,4 @@ std::cout <<fh.findLineWithData("ff");
 }
 
 
-
+*/
