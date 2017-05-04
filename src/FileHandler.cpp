@@ -8,14 +8,13 @@
 
 	bool FileHandler::openFile()
 	{
-		if(doesFileExist(fileName))
-		{
-			std::cout << "File does not exist\n";
-			return 0;
-		}
+		if(!doesFileExist(fileName))	return 0;
 		fileHnd.open(fileName.c_str());
-		if(!fileHnd.is_open()) return 0;
-			
+		if(!fileHnd.is_open())
+		{
+			std::cout <<"Could not open file\n";
+		 return 0;
+		}			
 		return 1;
 	};
 
@@ -29,6 +28,7 @@
 
 	std::string FileHandler::readFileToString()
 	{
+		if(! doesFileExist(fileName)) return "";
 	  std::ifstream ifs(fileName.c_str(), std::ios::in | std::ios::binary | std::ios::ate);
 
 	  std::ifstream::pos_type fileSize = ifs.tellg();
@@ -42,19 +42,37 @@
 
 	inline bool FileHandler::doesFileExist(const std::string& name)
 	{
-		struct stat buffer;   
-		return (stat (name.c_str(), &buffer) == 1); 
+		if (std::ifstream(name)) return true;
+
+		std::cout << "File does not exist\n" <<std::endl;
+		return false;
 	};
 
-/*
+	std::string FileHandler::findLineWithData(std::string data)
+	{
+	//	if(!fileHnd.is_open()) return 0;
+		std::string line;
+		while(std::getline(fileHnd, line))
+		{
+			std::size_t found = line.find(data);
+			if(found!=std::string::npos)
+			{
+				return line;
+			}
+		}
+		std::cout << line << " was not found in " << fileName << "\n";
+		return "";
+	};
+
 int main(){
 	FileHandler fh("test.txt");
-	fh.readFileToString();
-  std::string a;
-std::cout << fh.readFileToString();
+	fh.openFile();
+ // std::string a;
+//std::cout << fh.readFileToString();
+std::cout <<fh.findLineWithData("ff");
 
 	return 1;
-}*/
+}
 
 
 

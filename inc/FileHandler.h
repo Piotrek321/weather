@@ -7,15 +7,13 @@ class FileHandler
 
 	public:
 		FileHandler(std::string fName) : fileName(fName)
-		{
-			openFile();
-		}
+		{}
 
 		~FileHandler();
 		bool openFile(); //TODO options
     bool writeLineToFile();
 
-		
+		std::string findLineWithData(std::string data);
 		bool readFile();
 
 				void createFile();		
