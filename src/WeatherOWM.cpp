@@ -1,11 +1,7 @@
 #include "../inc/WeatherOWM.h"
 
 
-size_t WeatherOWM::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
-{
-    ((std::string*)userdata)->append((char*)ptr, size * nmemb);
-    return size * nmemb;
-}
+		// WeatherOWM::WeatherOWM(){std::cout<<"ZZZZ";}
 
 std::string WeatherOWM::getTemperature()
 {
@@ -19,11 +15,13 @@ std::string data ;
 		curl_easy_setopt(crl, CURLOPT_WRITEDATA, &data);
 		curl_easy_perform(crl);
 		curl_easy_cleanup(crl);
-		return data;
+		std::stringstream ss;
+		ss <<data;
+		return getTemperatureFromJSON(ss);
+		//return data;
 	}
 return "";
 }
-
 
 std::string WeatherOWM::getTemperatureFromJSON(std::stringstream &jsonData)
 {
@@ -33,8 +31,41 @@ std::string WeatherOWM::getTemperatureFromJSON(std::stringstream &jsonData)
   return pt.get<std::string>("main.temp");
 }
 
-int main()
+size_t WeatherOWM::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
-
-return 1;
+    ((std::string*)userdata)->append((char*)ptr, size * nmemb);
+    return size * nmemb;
 }
+
+std::string WeatherOWM::getCityID(std::string cityName)
+{
+	//FileHandler fh("../data/owm.city.list.json");
+	//fh.openFile();
+	//std::cout << fh;
+	return "";
+}
+
+std::stringstream WeatherOWM::getCurrentDate()
+{
+	std::stringstream currentDate;
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+
+  currentDate << (tm.tm_year + 1900) ;
+  if( (tm.tm_mon + 1 ) <10)
+  {
+		currentDate << "0";
+  }
+	currentDate << tm.tm_mon + 1;
+		 
+	currentDate << tm.tm_mday << " " << tm.tm_hour <<":";
+	if(tm.tm_min <10)
+	{
+		currentDate << "0";
+	}
+	currentDate << tm.tm_min;
+	
+	return currentDate;
+}
+
+

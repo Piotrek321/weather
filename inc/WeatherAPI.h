@@ -1,3 +1,6 @@
+#ifndef WeatherAPI_H_
+#define WeatherAPI_H_
+
 #include <iostream>
 #include <signal.h>
 #include <sys/ipc.h>
@@ -6,7 +9,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>  
-#include <iostream>
 
 #define SHMSZ  100
 #define KEY_VALUE 5678
@@ -15,14 +17,16 @@ class WeatherAPI
 {
 
 	public:
-		std::string getTemperature();
-		std::string getTemperatureFromJSON(std::stringstream &jsonData);
-		std::stringstream getCurrentDate();
-		static void signal_received(int sig, siginfo_t *info, void *context);
-		void init();
+		virtual std::string getTemperature(){};
+		virtual std::string getTemperatureFromJSON(std::stringstream &jsonData) {};
+		virtual std::stringstream getCurrentDate();
+		virtual void init();
+		virtual std::string getCityID(std::string cityName);
+		virtual ~WeatherAPI(){};
 
 		int   SharedMemoryID;      
 		pid_t *SharedMemoryPtr, anotherProcessPid;    
+		static void signal_received(int sig, siginfo_t *info, void *context);
 	protected:
 		std::string fileWithCitiesID;//needed??
 };
@@ -82,4 +86,6 @@ void WeatherAPI::init()
   *SharedMemoryPtr = pid; 
 
 }
+
+#endif
 

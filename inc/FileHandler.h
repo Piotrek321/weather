@@ -1,3 +1,7 @@
+#ifndef FileHandler_H_
+#define FileHandler_H_
+
+
 #include <iostream>
 #include <sys/stat.h>
 #include <fstream>
@@ -31,3 +35,5 @@ class FileHandler
   ifstream: Stream class to read from files
   fstream: Stream class to both read and write from/to files.
 */
+
+#endif
