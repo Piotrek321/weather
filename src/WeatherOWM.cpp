@@ -38,9 +38,9 @@ size_t WeatherOWM::write_callback(char *ptr, size_t size, size_t nmemb, void *us
 
 std::string WeatherOWM::getCityID(std::string cityName)
 {
-	//FileHandler fh("../data/owm.city.list.json");
-	//fh.openFile();
-	//std::cout << fh;
+	FileHandler fh("data/owm.city.list.json");
+	fh.openFile();
+//std::string fh.readFileToString();
 	return "";
 }
 
