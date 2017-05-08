@@ -1,7 +1,7 @@
 #ifndef WeatherOWM_H_
 #define WeatherOWM_H_
 
-//#include "WeatherAPI.h"
+#include "WeatherAPI.h"
 //#include "FileHandler.h"
 #include <vector>
 #include <curl/curl.h>
@@ -18,7 +18,7 @@
 #include <stdlib.h> 
 ///////////
 
-class WeatherOWM// :public WeatherAPI
+class WeatherOWM :public WeatherAPI
 {
 	public:
 
@@ -30,7 +30,7 @@ class WeatherOWM// :public WeatherAPI
 		WeatherOWM(){};
 	  virtual ~WeatherOWM(){};
 
-		std::stringstream getCurrentDate();
+		std::stringstream getCurrentDate(){};
 		virtual void init(){};
 
 	protected:

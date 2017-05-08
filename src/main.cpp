@@ -8,6 +8,6 @@ std::cout <<"AAAA";
 WeatherOWM a ;//= new WeatherOWM();
 std::string x = "Lodz";
 //std::cout << 
-a.getCurrentDate();
+std::cout <<a.getCurrentDate().str();
 	return 1;
 }

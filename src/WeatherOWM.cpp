@@ -18,7 +18,6 @@ std::string data ;
 		std::stringstream ss;
 		ss <<data;
 		return getTemperatureFromJSON(ss);
-		//return data;
 	}
 return "";
 }
@@ -45,27 +44,5 @@ std::string WeatherOWM::getCityID(std::string cityName)
 	return "";
 }
 
-std::stringstream WeatherOWM::getCurrentDate()
-{
-	std::stringstream currentDate;
-	time_t t = time(NULL);
-	struct tm tm = *localtime(&t);
-
-  currentDate << (tm.tm_year + 1900) ;
-  if( (tm.tm_mon + 1 ) <10)
-  {
-		currentDate << "0";
-  }
-	currentDate << tm.tm_mon + 1;
-		 
-	currentDate << tm.tm_mday << " " << tm.tm_hour <<":";
-	if(tm.tm_min <10)
-	{
-		currentDate << "0";
-	}
-	currentDate << tm.tm_min;
-	
-	return currentDate;
-}
 
 

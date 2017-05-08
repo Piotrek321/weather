@@ -19,9 +19,9 @@ class WeatherAPI
 	public:
 		virtual std::string getTemperature(){};
 		virtual std::string getTemperatureFromJSON(std::stringstream &jsonData) {};
-		virtual std::stringstream getCurrentDate();
+		//virtual std::stringstream getCurrentDate();
 		virtual void init();
-		virtual std::string getCityID(std::string cityName);
+		virtual std::string getCityID(std::string cityName){};
 		virtual ~WeatherAPI(){};
 
 		int   SharedMemoryID;      
@@ -31,7 +31,7 @@ class WeatherAPI
 		std::string fileWithCitiesID;//needed??
 };
 
-
+/*
 std::stringstream WeatherAPI::getCurrentDate()
 {
 	std::stringstream currentDate;
@@ -54,7 +54,7 @@ std::stringstream WeatherAPI::getCurrentDate()
 	
 	return currentDate;
 }
-
+*/
 
 void WeatherAPI::signal_received(int sig, siginfo_t *info, void *context) 
 {

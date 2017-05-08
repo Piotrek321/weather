@@ -1,20 +1,19 @@
 # top-level rule to compile the whole program.
-all: prog
+all: prog clean
 
 # program is made of several source files.
-prog: main.o file1.o
-	g++ main.o file1.o -o prog -lcurl -l json -lboost_iostreams -lboost_system
+prog: main.o WeatherOWM.o
+	g++ main.o WeatherOWM.o -o prog -lcurl -l json -lboost_iostreams -lboost_system
 
-# rule for file "main.o".
-main.o: src/main.cpp inc/WeatherOWM.h
-	g++ -std=c++11 -g -Wall -c src/main.cpp -lcurl -l json -lboost_iostreams -lboost_system
+# rule for file "main.o".inc/WeatherOWM.h
+main.o: src/main.cpp 
+	g++ -std=c++11 -g -Wall -c src/main.cpp 
 
-# rule for file "file1.o".
-file1.o: src/WeatherOWM.cpp inc/WeatherOWM.h
-	g++ -std=c++11 -g -Wall -c src/WeatherOWM.cpp -o file1.o -lcurl -l json -lboost_iostreams -lboost_system
-
+# rule for file "WeatherOWM.o".
+WeatherOWM.o: src/WeatherOWM.cpp
+	g++ -std=c++11 -g -Wall -c src/WeatherOWM.cpp -o WeatherOWM.o
 # rule for cleaning files generated during compilations.
-#clean:
-#        /bin/rm -f prog main.o file1.o file2.o
+clean:
+	/bin/rm -f main.o WeatherOWM.o
 #g++ -std=c++11 src/main.cpp -o main.o -lcurl -l json -lboost_iostreams -lboost_system
 
