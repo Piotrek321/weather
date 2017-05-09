@@ -12,7 +12,7 @@ void Plotter::plotChart(Gnuplot &gp)
 
 void Plotter::init()
 {
-
+/*
   pid_t pid;
   key_t MyKey = KEY_VALUE;
   int   SharedMemoryID;
@@ -21,13 +21,5 @@ void Plotter::init()
 
   SharedMemoryID   = shmget(MyKey, SHMSZ, 0666);
   SharedMemoryPTR  = (int *) shmat(SharedMemoryID, NULL, 0);
-  pid     	       = *SharedMemoryPTR;  
+  pid     	       = *SharedMemoryPTR;  */
 }
-/*
-int main()
-{
-Plotter a;
-a.init();
-return 1;
-}
-*/

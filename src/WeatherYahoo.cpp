@@ -31,6 +31,17 @@ std::string WeatherYahoo::getTemperature()
 	}
 	return "";
 }
+
+std::string WeatherYahoo::getCityID(std::string cityName)
+{
+//	FileHandler fh("data/owm.city.list.json");
+	//fh.openFile();
+//std::string fh.readFileToString();
+	return "";
+}
+
+
+
 /*
 int main()
 {

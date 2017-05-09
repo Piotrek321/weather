@@ -1,3 +1,6 @@
+#ifndef Plotter_H_
+#define Plotter_H_
+
 #include <iostream>
 #include <sys/shm.h>
 #include <signal.h>
@@ -20,4 +23,4 @@ class Plotter
 		void plotChart(Gnuplot &gp);			
 };
 
-
+#endif
