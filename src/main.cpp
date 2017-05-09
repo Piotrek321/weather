@@ -7,11 +7,12 @@ int main(){
 std::cout <<"AAAA";
 Plotter y;
 y.init();
-WeatherYahoo b; 
-WeatherOWM a ;//= new WeatherOWM();
+WeatherOWM b; 
+
 std::string x = "Lodz";
 //std::cout << 
-std::cout <<a.getCityID("Lodz");
-b.getCityID("LOdz");
+//std::cout <<a.getCityID("Lodz");
+
+std::cout << b.getCityInfo("Lodz");
 	return 1;
 }

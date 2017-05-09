@@ -57,7 +57,7 @@ class WeatherAPI
 
 		}
 
-		virtual std::string getCityID(std::string cityName) =0;
+		virtual std::string getCityInfo(std::string cityName) =0;
 		virtual ~WeatherAPI(){};
 
 		int   SharedMemoryID;      
