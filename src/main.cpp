@@ -7,12 +7,16 @@ int main(){
 std::cout <<"AAAA";
 Plotter y;
 y.init();
-WeatherOWM b; 
+WeatherAPI * b = new WeatherOWM;
+ 
 
 std::string x = "Lodz";
 //std::cout << 
 //std::cout <<a.getCityID("Lodz");
 
-std::cout << b.getCityInfo("Lodz");
+std::cout << b->getCityID("Lodz");
+std::cout << b->getCityID("London");
+b->printMap();
+
 	return 1;
 }

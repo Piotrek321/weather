@@ -8,15 +8,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 //////////
-#include <iostream>
-#include <signal.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <sstream> 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h> 
-#include <map>
+
 ///////////
 
 class WeatherOWM :public WeatherAPI
@@ -26,16 +18,16 @@ class WeatherOWM :public WeatherAPI
 		std::string getTemperatureFromJSON(std::stringstream &jsonData);
 		std::string getTemperature();
 		static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
-		std::string getCityInfo(std::string cityName);
+		std::string getCityID(std::string cityName);
 		WeatherOWM(){};
 	  virtual ~WeatherOWM(){};
-		std::string getIDFromJSON(std::stringstream &cityInfo);
+		std::string getInfoAboutCity(std::stringstream &cityInfo);
 		//std::stringstream getCurrentDate(){};
 		virtual void init(){};
 
 	protected:
 		std::string fileWithCitiesID;//needed??
-		std::map<std::string, int> cityNameID;
+
 };
 
 

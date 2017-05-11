@@ -30,7 +30,7 @@ std::string WeatherOWM::getTemperatureFromJSON(std::stringstream &jsonData)
   return pt.get<std::string>("main.temp");
 }
 
-std::string WeatherOWM::getIDFromJSON(std::stringstream &cityInfo)
+std::string WeatherOWM::getInfoAboutCity(std::stringstream &cityInfo)
 {
   boost::property_tree::ptree pt;
   boost::property_tree::read_json(cityInfo, pt);
@@ -44,13 +44,15 @@ size_t WeatherOWM::write_callback(char *ptr, size_t size, size_t nmemb, void *us
     return size * nmemb;
 }
 
-std::string WeatherOWM::getCityInfo(std::string cityName)
+
+std::string WeatherOWM::getCityID(std::string cityName)
 {
 	FileHandler fh("data/owm.city.list.json");
 	fh.openFile();
-	std::stringstream info ;
-	info<< fh.findLineWithData("Lodz");
-	return getIDFromJSON(info);
+	std::stringstream info (fh.findLineWithData(cityName));
+  std::string id = getInfoAboutCity(info);
+  putCityIntoMap(cityName, id);
+	return id;
 }
 
 
