@@ -11,7 +11,7 @@ RM = /bin/rm -f
 # path to src files
 SRC = src/
 # list of generated object files.
-OBJS = main.o WeatherOWM.o WeatherYahoo.o FileHandler.o Plotter.o
+OBJS = main.o WeatherOWM.o WeatherYahoo.o FileHandler.o Plotter.o WeatherGeneral.o
 
 PROG = prog
 

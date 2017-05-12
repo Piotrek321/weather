@@ -1,4 +1,14 @@
-import yweather
-client = yweather.Client()
+#!/usr/bin/python
 
-print(client.fetch_woeid('Lodz, Poland'))
+import sys, yweather
+
+client = yweather.Client()
+city = sys.argv[1]
+country = ""
+try:
+	country = ' , ' + sys.argv[2]
+except:
+	country = ""
+
+print(client.fetch_woeid(city + country))
+

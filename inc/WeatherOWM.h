@@ -1,7 +1,7 @@
 #ifndef WeatherOWM_H_
 #define WeatherOWM_H_
 
-#include "WeatherAPI.h"
+#include "WeatherGeneral.h"
 #include "FileHandler.h"
 #include <vector>
 #include <curl/curl.h>
@@ -11,7 +11,7 @@
 
 ///////////
 
-class WeatherOWM :public WeatherAPI
+class WeatherOWM :public WeatherGeneral
 {
 	public:
 
