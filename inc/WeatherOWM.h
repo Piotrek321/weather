@@ -16,7 +16,7 @@ class WeatherOWM :public WeatherGeneral
 	public:
 
 		std::string getTemperatureFromJSON(std::stringstream &jsonData);
-		std::string getTemperature();
+		std::string getTemperature(std::string cityID);
 		static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 		std::string getCityID(std::string cityName);
 		WeatherOWM(){};

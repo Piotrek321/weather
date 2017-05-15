@@ -3,7 +3,7 @@
 
 		// WeatherOWM::WeatherOWM(){std::cout<<"ZZZZ";}
 
-std::string WeatherOWM::getTemperature()
+std::string WeatherOWM::getTemperature(std::string cityID)
 {
 std::string data ;
 	CURL * crl = curl_easy_init();
