@@ -5,7 +5,7 @@
 #include <vector>
 #include <curl/curl.h>
 #include <boost/property_tree/json_parser.hpp>
-
+#include <algorithm>
 
 class WeatherYahoo :public WeatherGeneral
 {

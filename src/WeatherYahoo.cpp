@@ -16,28 +16,15 @@ std::string WeatherYahoo::getTemperatureFromJSON(std::stringstream &jsonData)
 std::string WeatherYahoo::getTemperature(std::string cityID)
 {
 	std::string data ;
-std::cout << "CITYID:" << cityID.c_str();
+	std::transform(cityID.begin(), cityID.end(), cityID.begin(), ::tolower);	
 	CURL * crl = curl_easy_init();
-
-
-/////////////////////////////////////////////////DZIALA ALE CITY MA BYC Z MALEJ LITERY item.forecast kilkudniowa chyba 5
-std::string cc = "https://query.yahooapis.com/v1/public/yql?q=select%20item.forecast%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22";
-cc += cityID.c_str();
-cc += "%2C%20pl%22)%20and%20u%3D%27c%27%20limit%203&format=json";
-std::string pp = "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20%3D%20";
-std::string lk = "12577937";
-pp += lk.c_str(); //"12577937";
-pp += "%20and%20u='c'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-
+//item.forecast to get 3-5 days forecast/ item.condition for one day condition
+	std::string yahooQuery = "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22";
+	yahooQuery += cityID.c_str();
+	yahooQuery += "%2C%20pl%22)%20and%20u%3D%27c%27%20limit%203&format=json";
 	if(crl)
 	{
-//ZAMIENIC NA CC!!!
-std::cout <<"x: " << cc.c_str()  << "\n";
-		curl_easy_setopt(crl, CURLOPT_URL,pp.c_str() );
-/*
-https://query.yahooapis.com/v1/public/yql?q=select%20item.forecast%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22munic%2C%20de%22)%20and%20u%3D%27c%27%20limit%203&format=json
-*/
-		//curl_easy_setopt(crl, CURLOPT_URL, );
+		curl_easy_setopt(crl, CURLOPT_URL,yahooQuery.c_str() );
 		curl_easy_setopt(crl, CURLOPT_HTTPGET, 1L);
 		curl_easy_setopt(crl, CURLOPT_WRITEFUNCTION, write_callback);
 		curl_easy_setopt(crl, CURLOPT_WRITEDATA, &data);
@@ -47,11 +34,10 @@ https://query.yahooapis.com/v1/public/yql?q=select%20item.forecast%20from%20weat
 
 		return data;
 	}
-std::cout <<"PPP\n";
 	return "";
 }
 
-
+//To be removed
 std::string WeatherYahoo::getCityID(std::string cityName)
 {	
 	if(cityName == "")
@@ -79,57 +65,3 @@ std::string WeatherYahoo::getCityID(std::string cityName)
 	pclose(output);
 	return woeid;
 }
-
-
-/*
-///////////////////TEZ DZIALA ALE CITY MA BYC Z MALEJ LITERY
-std::string xx = "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20%3D%20";
-xx += cityID.substr(0,cityID.length()-1).c_str();
-xx += "%20and%20u='c'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-///////////////////////////////////////////////
-
-std::string pp = "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20%3D%20";
-std::string lk = "12577937";
-pp += lk.c_str(); //"12577937";
-pp += "%20and%20u='c'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-///////////////////////////////////////////////
-
-std::string WeatherYahoo::getTemperature22(std::string cityID)
-{
-	std::string data ;
-std::cout << "CITYID:" << cityID.c_str();
-	CURL * crl = curl_easy_init();
-std::string xx = "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20%3D%20";
-xx += cityID.substr(0,cityID.length()-1).c_str();
-xx += "%20and%20u='c'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-
-std::string cc = "https://query.yahooapis.com/v1/public/yql?q=select%20item.forecast%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22";
-cc += "lodz%2C%20";
-cc += "pl%22)%20and%20u%3D%27c%27%20limit%203&format=json";
-std::string pp = "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20%3D%20";
-std::string lk = "12577937";
-pp += lk.c_str(); //"12577937";
-pp += "%20and%20u='c'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-
-	if(crl)
-	{
-std::cout <<"x: " << pp.c_str()  << "\n";
-		curl_easy_setopt(crl, CURLOPT_URL,cc.c_str() );
-
-https://query.yahooapis.com/v1/public/yql?q=select%20item.forecast%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22munic%2C%20de%22)%20and%20u%3D%27c%27%20limit%203&format=json
-
-		//curl_easy_setopt(crl, CURLOPT_URL, );
-		curl_easy_setopt(crl, CURLOPT_HTTPGET, 1L);
-		curl_easy_setopt(crl, CURLOPT_WRITEFUNCTION, write_callback);
-		curl_easy_setopt(crl, CURLOPT_WRITEDATA, &data);
-
-		curl_easy_perform(crl);
-		curl_easy_cleanup(crl);
-
-		return data;
-	}
-std::cout <<"PPP\n";
-	return "";
-}
-
-*/
