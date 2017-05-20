@@ -6,13 +6,6 @@ size_t WeatherYahoo::write_callback(char *ptr, size_t size, size_t nmemb, void *
     return size * nmemb;
 }
 
-std::string WeatherYahoo::getTemperatureFromJSON(std::stringstream &jsonData)
-{
-  boost::property_tree::ptree pt;
-  boost::property_tree::read_json(jsonData, pt);
-  return pt.get<std::string>("query.results.channel.item.condition.temp");
-}
-
 std::string WeatherYahoo::getTemperature(std::string cityID)
 {
 	std::string data ;
@@ -31,8 +24,9 @@ std::string WeatherYahoo::getTemperature(std::string cityID)
 
 		curl_easy_perform(crl);
 		curl_easy_cleanup(crl);
-
-		return data;
+		std::stringstream ss;
+		ss <<data;
+		return getTemperatureFromJSON(ss, "query.results.channel.item.condition.temp");
 	}
 	return "";
 }

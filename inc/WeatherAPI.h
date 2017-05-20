@@ -19,7 +19,7 @@ class WeatherAPI
 
 	public:
 		virtual std::string getTemperature(std::string cityID) =0;
-		virtual std::string getTemperatureFromJSON(std::stringstream &jsonData) =0;
+		virtual std::string getTemperatureFromJSON(std::stringstream &jsonData, const char * getElement) =0;
 		virtual std::string getCityID(std::string cityName) =0;
 		virtual ~WeatherAPI(){};
 

@@ -2,27 +2,17 @@
 #define WeatherOWM_H_
 
 #include "WeatherGeneral.h"
-#include "FileHandler.h"
-#include <vector>
-#include <curl/curl.h>
-#include <boost/property_tree/json_parser.hpp>
-
-//////////
-
-///////////
 
 class WeatherOWM :public WeatherGeneral
 {
 	public:
 
-		std::string getTemperatureFromJSON(std::stringstream &jsonData);
 		std::string getTemperature(std::string cityID);
 		static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 		std::string getCityID(std::string cityName);
 		WeatherOWM(){};
 	  virtual ~WeatherOWM(){};
 		std::string getInfoAboutCity(std::stringstream &cityInfo);
-		//std::stringstream getCurrentDate(){};
 		virtual void init(){};
 
 	protected:

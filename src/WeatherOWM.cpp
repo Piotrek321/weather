@@ -1,11 +1,8 @@
 #include "../inc/WeatherOWM.h"
 
-
-		// WeatherOWM::WeatherOWM(){std::cout<<"ZZZZ";}
-
 std::string WeatherOWM::getTemperature(std::string cityID)
 {
-std::string data ;
+  std::string data ;
 	CURL * crl = curl_easy_init();
 	if(crl)
 	{
@@ -17,17 +14,9 @@ std::string data ;
 		curl_easy_cleanup(crl);
 		std::stringstream ss;
 		ss <<data;
-		return getTemperatureFromJSON(ss);
+		return getTemperatureFromJSON(ss, "main.temp");
 	}
-return "";
-}
-
-std::string WeatherOWM::getTemperatureFromJSON(std::stringstream &jsonData)
-{
-  boost::property_tree::ptree pt;
-  boost::property_tree::read_json(jsonData, pt);
-  //std::cout << pt.get() ;
-  return pt.get<std::string>("main.temp");
+  return "";
 }
 
 std::string WeatherOWM::getInfoAboutCity(std::stringstream &cityInfo)
@@ -47,7 +36,7 @@ size_t WeatherOWM::write_callback(char *ptr, size_t size, size_t nmemb, void *us
 
 std::string WeatherOWM::getCityID(std::string cityName)
 {
-	FileHandler fh("data/owm.city.list.json");
+	FileHandler fh("../data/owm.city.list.json");
 	fh.openFile();
 	std::stringstream info (fh.findLineWithData(cityName));
   std::string id = getInfoAboutCity(info);

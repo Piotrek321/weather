@@ -44,6 +44,15 @@
 		}
 	}
 
+std::string WeatherGeneral::getTemperatureFromJSON(std::stringstream &jsonData, const char * getElement)
+{
+  boost::property_tree::ptree pt;
+  boost::property_tree::read_json(jsonData, pt);
+  return pt.get<std::string>(getElement);
+}
+
+
+
 	void WeatherGeneral::printMap()
 	{
 		auto iter = cityNameID_m.begin();
