@@ -15,13 +15,13 @@ class WeatherGeneral : public WeatherAPI
 		virtual std::string getTemperatureFromJSON(std::stringstream &jsonData, const char * getElement);
 		virtual std::string getCityID(std::string cityName) =0;
 		virtual ~WeatherGeneral(){};
-
+		virtual std::string sendHttpRequest(std::string httpQuery , const char * getElement, std::stringstream &ss);
 		virtual std::stringstream getCurrentDate();
 
 		virtual void init();
 
 		void putCityIntoMap(std::string cityName , std::string id);
-
+		static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 		void printMap();
 
 		int   SharedMemoryID;      

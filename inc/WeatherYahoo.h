@@ -9,7 +9,7 @@ class WeatherYahoo :public WeatherGeneral
 
 	public:
 		std::string getTemperature(std::string cityID);
-		static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
+		//static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 		std::string getCityID(std::string cityName);
 		WeatherYahoo(){};
 	  virtual ~WeatherYahoo(){};
