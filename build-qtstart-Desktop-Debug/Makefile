@@ -14,7 +14,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -m64 -pipe -g -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I../qtstart -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
@@ -50,10 +50,12 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../qtstart/main.cpp \
 		../qtstart/mainwindow.cpp \
-		../src/ProgramHandler.cpp moc_mainwindow.cpp
+		../src/ProgramHandler.cpp \
+		../src/FileHandler.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		ProgramHandler.o \
+		FileHandler.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -104,6 +106,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resources.prf \
@@ -116,9 +119,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../qtstart/qtstart.pro ../qtstart/mainwindow.h \
-		../inc/ProgramHandler.h ../qtstart/main.cpp \
+		../inc/ProgramHandler.h \
+		../inc/FileHandler.h ../qtstart/main.cpp \
 		../qtstart/mainwindow.cpp \
-		../src/ProgramHandler.cpp
+		../src/ProgramHandler.cpp \
+		../src/FileHandler.cpp
 QMAKE_TARGET  = qtstart
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = qtstart
@@ -198,6 +203,7 @@ Makefile: ../qtstart/qtstart.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resources.prf \
@@ -263,6 +269,7 @@ Makefile: ../qtstart/qtstart.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resources.prf:
@@ -292,8 +299,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../qtstart/mainwindow.h ../inc/ProgramHandler.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../qtstart/main.cpp ../qtstart/mainwindow.cpp ../src/ProgramHandler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../qtstart/mainwindow.h ../inc/ProgramHandler.h ../inc/FileHandler.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../qtstart/main.cpp ../qtstart/mainwindow.cpp ../src/ProgramHandler.cpp ../src/FileHandler.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../qtstart/mainwindow.ui $(DISTDIR)/
 
 
@@ -321,6 +328,7 @@ compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
 moc_mainwindow.cpp: ../inc/ProgramHandler.h \
+		../inc/FileHandler.h \
 		../qtstart/mainwindow.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/piotrek/Desktop/weather/qtstart -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../qtstart/mainwindow.h -o moc_mainwindow.cpp
 
@@ -343,15 +351,20 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: ../qtstart/main.cpp ../qtstart/mainwindow.h \
-		../inc/ProgramHandler.h
+		../inc/ProgramHandler.h \
+		../inc/FileHandler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../qtstart/main.cpp
 
 mainwindow.o: ../qtstart/mainwindow.cpp ../qtstart/mainwindow.h \
-		../inc/ProgramHandler.h
+		../inc/ProgramHandler.h \
+		../inc/FileHandler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../qtstart/mainwindow.cpp
 
 ProgramHandler.o: ../src/ProgramHandler.cpp ../inc/ProgramHandler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ProgramHandler.o ../src/ProgramHandler.cpp
+
+FileHandler.o: ../src/FileHandler.cpp ../inc/FileHandler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o FileHandler.o ../src/FileHandler.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

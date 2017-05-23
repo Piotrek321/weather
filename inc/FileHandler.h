@@ -20,9 +20,9 @@ class FileHandler
 		std::string findLineWithData(std::string data);
 		bool readFile();
 
-				void createFile();		
+		void createFile();		
 		void removeFile();		
-	 bool doesFileExist(const std::string& name);
+	static bool doesFileExist(const std::string& name, bool printInfo=1);
 	std::string readFileToString();
 	protected:
 	  std::fstream fileHnd;

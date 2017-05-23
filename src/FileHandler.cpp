@@ -40,11 +40,12 @@
 	  return std::string(&bytes[0], fileSize);
 	}
 
-	inline bool FileHandler::doesFileExist(const std::string& name)
+	inline bool FileHandler::doesFileExist(const std::string& name, bool printInfo)
 	{
 		if (std::ifstream(name)) return true;
 
-		std::cout << "File does not exist\n" <<std::endl;
+		if(printInfo)
+			std::cout << "File does not exist\n" <<std::endl;
 		return false;
 	};
 
