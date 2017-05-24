@@ -3,7 +3,6 @@
 	FileHandler::~FileHandler()
 	{
 		fileHnd.close();
-		std::cout<< "~FileHandler\n";
 	}
 
 	bool FileHandler::openFile()
@@ -45,13 +44,12 @@
 		if (std::ifstream(name)) return true;
 
 		if(printInfo)
-			std::cout << "File does not exist\n" <<std::endl;
+			std::cout << "File does not exist: " << name <<"\n" <<std::endl;
 		return false;
 	};
 
 	std::string FileHandler::findLineWithData(std::string data)
 	{
-	//	if(!fileHnd.is_open()) return 0;
 		std::string line;
 		while(std::getline(fileHnd, line))
 		{
@@ -61,19 +59,6 @@
 				return line;
 			}
 		}
-		std::cout << line << " was not found in " << fileName << "\n";
+		std::cout << "\n" << data << " was not found in " << fileName << "\n";
 		return "";
 	};
-/*
-int main(){
-	FileHandler fh("test.txt");
-	fh.openFile();
- // std::string a;
-//std::cout << fh.readFileToString();
-std::cout <<fh.findLineWithData("ff");
-
-	return 1;
-}
-
-
-*/

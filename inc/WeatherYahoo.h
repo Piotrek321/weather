@@ -8,10 +8,11 @@ class WeatherYahoo :public WeatherGeneral
 {
 
 	public:
-		std::string getTemperature(std::string cityID);
+		std::string getTemperature(std::string cityName);
 		//static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata);
 		std::string getCityID(std::string cityName);
-		WeatherYahoo(){};
+    WeatherYahoo() : WeatherGeneral("Yahoo"){};
+
 	  virtual ~WeatherYahoo(){};
 
 		virtual void init(){};

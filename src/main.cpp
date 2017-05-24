@@ -13,12 +13,13 @@ WeatherAPI * b = new WeatherOWM;
 WeatherAPI * c= new WeatherYahoo;
 
 std::string x = "Lodz";
- 	
-std::cout <<"Weather Lodz OWM: " ;
-std::cout << b->getTemperature("Lodz") << "\n";
 
-std::cout <<"Weather Lodz Yahoo: " ;
-std::cout << c->getTemperature("lodz") << "\n";
+//TODO: handle wrong city name ??
+b->printTemperature("zxczxcsdvasdgsdfbdsfvds");
+
+b->printTemperature("London");
+
+c->printTemperature("lodz");
 
 
 	return 1;

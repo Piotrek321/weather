@@ -19,6 +19,13 @@ std::string WeatherGeneral::sendHttpRequest(std::string httpQuery , const char *
 	return "";
 }
 
+void WeatherGeneral::printTemperature(std::string cityName)
+{
+  std::string temperature = getTemperature(cityName);
+	if(temperature == "") return ;
+  std::cout <<"Temperature from " << m_appName << ". City: " << cityName << " temperature: " << temperature << "\n";
+}
+
 size_t WeatherGeneral::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
     ((std::string*)userdata)->append((char*)ptr, size * nmemb);

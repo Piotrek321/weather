@@ -14,11 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp\
-        /home/piotrek/Desktop/weather/src/ProgramHandler.cpp\
-        /home/piotrek/Desktop/weather/src/FileHandler.cpp
+        ../src/ProgramHandler.cpp\
+        ../src/FileHandler.cpp
 
 HEADERS  += mainwindow.h\
-            /home/piotrek/Desktop/weather/inc/ProgramHandler.h\
-            /home/piotrek/Desktop/weather/inc/FileHandler.h
+         ../inc/ProgramHandler.h\
+         ../inc/FileHandler.h
 
 FORMS    += mainwindow.ui
