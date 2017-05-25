@@ -10,6 +10,7 @@
 #include <QStatusBar>
 #include <QAction>
 #include <QTextCodec>
+#include <QShortcut>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -26,11 +27,16 @@ private:
     QPushButton *startButton;
     QPushButton *exitButton;
     QPushButton *compileButton;
+    QPushButton *okButton;
+
     QLabel *label;
     ProgramHandler progHandler;
     QMenu *menu;
     QAction *quitAction;
-QLineEdit * lnEdit;
+    QLineEdit * lnEdit;
+    QShortcut * shortcut;
+
+    std::string cityName;
     void createMenus();
     void createStatusBar();
 
@@ -41,6 +47,7 @@ private slots:
     void runApp();
     void compile();
     void getData();
+    void restart();
 
 };
 

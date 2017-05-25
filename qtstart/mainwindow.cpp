@@ -14,6 +14,13 @@ MainWindow::MainWindow()
     compileButton = new QPushButton(tr("&Compile"), this);
     compileButton->setGeometry(150, 75, 100, 30);
 
+    okButton = new QPushButton(tr("&Ok"), this);
+    okButton->setGeometry(200, 100, 100, 30);
+    okButton->setDefault(true);
+    okButton->setAutoDefault(false);
+
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Return), this);
+
     restartButton = new QPushButton(tr("&Restart"), this);
     restartButton->setGeometry(5, 105, 100, 30);
 
@@ -23,29 +30,33 @@ MainWindow::MainWindow()
     startButton = new QPushButton(tr("&Start"), this);
     startButton->setGeometry(5, 45, 100, 30);
 
-    connect(restartButton, SIGNAL(clicked()), this, SLOT(getData()));
+    connect(restartButton, SIGNAL(clicked()), this, SLOT(restart()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(getData()));
     connect(exitButton, SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(startButton, SIGNAL(clicked()), this, SLOT(runApp()));
     connect(compileButton, SIGNAL(clicked()), this, SLOT(compile()));
+    connect(shortcut, SIGNAL(activated()), this, SLOT(getData()));
 
-
-
-   lnEdit = new QLineEdit(this);
-    lnEdit->setGeometry(200,200,200,200);
+    lnEdit = new QLineEdit(this);
+    lnEdit->setGeometry(200,200,100,50);
     lnEdit->setText("Hello my id");
 
     setMinimumSize(200, 200);
     resize(480, 320);
 }
 
-void MainWindow::getData()
+void MainWindow::restart()
 {
-QString str;
-str = lnEdit->text();
-std::cout <<str.toStdString() <<std::flush;
+
 }
 
-
+void MainWindow::getData()
+{
+  QString str;
+  str = lnEdit->text();
+  std::cout <<str.toStdString() <<std::flush;
+  cityName = lnEdit->text().toStdString();
+}
 
 void MainWindow::compile()
 {
