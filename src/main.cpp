@@ -4,35 +4,42 @@
 #include "../inc/WeatherYahoo.h"
 #include <stdio.h>
 
+bool isResetCalled = false;
+void  SIGTERM_handler(int sig);
+int main()
+{
+	Plotter y;
+	y.init();
+	WeatherAPI * b = new WeatherOWM;
+	WeatherAPI * c= new WeatherYahoo;
 
-int main(){
+  if(signal(SIGTERM, SIGTERM_handler) == SIG_ERR) 
+  {
+     printf("SIGTERM install error\n");
+     exit(1);
+  }
+	std::string x = "Lodz";
+		std::cout <<"START\n" <<std::flush;
+	//TODO: handle wrong city name ??
+	b->printTemperature("zxczxcsdvasdgsdfbdsfvds");
 
-Plotter y;
-y.init();
-WeatherAPI * b = new WeatherOWM;
-WeatherAPI * c= new WeatherYahoo;
+	b->printTemperature("London");
 
-std::string x = "Lodz";
-  
-//TODO: handle wrong city name ??
-b->printTemperature("zxczxcsdvasdgsdfbdsfvds");
-
-b->printTemperature("London");
-
-c->printTemperature("lodz");
-
-while(1)
-{}
+	c->printTemperature("lodz");
+	while(isResetCalled != true)
+	{}
+delete b;
+delete c;
+exit(3);
 	return 1;
 }
 
-//if (signal(SIGQUIT, SIGQUIT_handler) == SIG_ERR) 
-/*
-void  SIGQUIT_handler(int sig)
+
+void  SIGTERM_handler(int sig)
 {
-  signal(sig, SIG_IGN);
   printf("From SIGQUIT: just got a %d (SIGQUIT ^\\) signal and is about to quit\n", sig);
-  shmdt(SharedMemoryPtr);
-  shmctl(SharedMemoryID, IPC_RMID, NULL);
-  exit(3);
-}*/
+	isResetCalled =true;
+  //exit(3);
+}
+
+

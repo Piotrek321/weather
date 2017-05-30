@@ -13,7 +13,7 @@ class WeatherYahoo :public WeatherGeneral
 		std::string getCityID(std::string cityName);
     WeatherYahoo() : WeatherGeneral("Yahoo"){};
 
-	  virtual ~WeatherYahoo(){};
+	  virtual ~WeatherYahoo(){std::cout <<"~WeatherYahoo\n" <<std::flush;};
 
 		virtual void init(){};
 	protected:

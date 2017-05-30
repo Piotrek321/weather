@@ -23,7 +23,7 @@ void WeatherGeneral::printTemperature(std::string cityName)
 {
   std::string temperature = getTemperature(cityName);
 	if(temperature == "") return ;
-  std::cout <<"Temperature from " << m_appName << ". City: " << cityName << " temperature: " << temperature << "\n";
+  std::cout <<"Temperature from " << m_appName << ". City: " << cityName << " temperature: " << temperature << "\n" << std::flush;
 }
 
 size_t WeatherGeneral::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)

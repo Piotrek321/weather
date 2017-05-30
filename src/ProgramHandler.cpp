@@ -1,13 +1,15 @@
 #include "../inc/ProgramHandler.h"
+#include <signal.h>
 
-int ProgramHandler::startApp(std::string pathToProgram, bool doYouWantToWaitForChild)
+int ProgramHandler::startApp(bool doYouWantToWaitForChild)
 {
     pid_t pid = fork();
     int statval;
 
     if(pid == 0) //child
     {
-        execl(pathToProgram.c_str(), pathToProgram.c_str(), (char*) NULL);
+        execl(m_programName.c_str(), m_programName.c_str(), (char*) NULL);
+        exit(3);
     }
     else if(pid <0)
     {
@@ -16,7 +18,6 @@ int ProgramHandler::startApp(std::string pathToProgram, bool doYouWantToWaitForC
     }
     else //Parent
     {
-      std::cout <<"Parent\n";
       if(doYouWantToWaitForChild)
       {
         waitpid( (pid <0), &statval, WCONTINUED);
@@ -29,9 +30,16 @@ int ProgramHandler::startApp(std::string pathToProgram, bool doYouWantToWaitForC
     }
     return 1;
 }
+
+bool ProgramHandler::isProgramRunning()
+{
+  return Helper::getPID(m_programName) ? 1 : 0;
+}
+
+
 int ProgramHandler::performRestart()
 {
-
+ waitpid(Helper::getPID(m_programName), 0, 0);
  return 1;
 }
 

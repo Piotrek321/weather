@@ -5,7 +5,7 @@
 MainWindow::MainWindow()
 {
     QTextCodec::codecForName ("UTF-8");
-
+    progHandler = new ProgramHandler("../prog");
    //createMenus();
    // createStatusBar();
     label = new QLabel(tr("Weather forecast"), this);
@@ -47,7 +47,18 @@ MainWindow::MainWindow()
 
 void MainWindow::restart()
 {
-
+  pid_t pid =  Helper::getPID("prog");
+   std::cout <<"PID: " << Helper::getPID("prog") <<std::flush;
+  if(pid != 0)
+  {
+      std::cout <<"Restart of process with PID: " << pid <<std::flush;
+      kill(pid, SIGTERM );
+      progHandler->performRestart();
+  }
+  else
+  {
+      std::cout <<"Process does not exists\n" << std::flush;
+  }
 }
 
 void MainWindow::getData()
@@ -61,17 +72,25 @@ void MainWindow::getData()
 void MainWindow::compile()
 {
   std::cout <<"Compilation started\n" <<std::flush;
-  progHandler.runMakefile();
+  progHandler->runMakefile();
   std::cout <<"Compilation completed\n" <<std::flush;
 }
 
 void MainWindow::runApp()
-{    
+{
+  std::cout <<"RunApp\n" << std::flush;
   if(!FileHandler::doesFileExist("../prog", 0))
   {
     compile();
   }
-  progHandler.startApp("../prog");
+  if(progHandler->isProgramRunning())
+  {
+    std::cout <<"Program: " << "../prog"  << " is already running" <<std::flush;
+  }
+  else
+  {
+    progHandler->startApp();
+  }
 }
 
 void MainWindow::createMenus()

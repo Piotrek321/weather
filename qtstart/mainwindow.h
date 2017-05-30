@@ -17,6 +17,7 @@
 #include <iostream>
 #include "../inc/ProgramHandler.h"
 #include "../inc/FileHandler.h"
+#include "../inc/Helper.h"
 
 class MainWindow : public QMainWindow
 {
@@ -30,7 +31,7 @@ private:
     QPushButton *okButton;
 
     QLabel *label;
-    ProgramHandler progHandler;
+    ProgramHandler * progHandler;
     QMenu *menu;
     QAction *quitAction;
     QLineEdit * lnEdit;
@@ -42,6 +43,10 @@ private:
 
 public:
     MainWindow();
+    ~MainWindow()
+    {
+       delete progHandler;
+    }
 
 private slots:
     void runApp();
