@@ -21,7 +21,8 @@ b->printTemperature("London");
 
 c->printTemperature("lodz");
 
-
+while(1)
+{}
 	return 1;
 }
 
