@@ -14,13 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp\
+        ../src/Helper.cpp\
         ../src/ProgramHandler.cpp\
-        ../src/FileHandler.cpp\
-        ../src/Helper.cpp
+        ../src/FileHandler.cpp
+
 
 HEADERS  += mainwindow.h\
+         ../inc/Helper.h\
          ../inc/ProgramHandler.h\
-         ../inc/FileHandler.h\
-         ../inc/Helper.h
+         ../inc/FileHandler.h
 
 FORMS    += mainwindow.ui

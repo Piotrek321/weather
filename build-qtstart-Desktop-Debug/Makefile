@@ -50,10 +50,12 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../qtstart/main.cpp \
 		../qtstart/mainwindow.cpp \
+		../src/Helper.cpp \
 		../src/ProgramHandler.cpp \
 		../src/FileHandler.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		Helper.o \
 		ProgramHandler.o \
 		FileHandler.o \
 		moc_mainwindow.o
@@ -119,9 +121,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../qtstart/qtstart.pro ../qtstart/mainwindow.h \
+		../inc/Helper.h \
 		../inc/ProgramHandler.h \
 		../inc/FileHandler.h ../qtstart/main.cpp \
 		../qtstart/mainwindow.cpp \
+		../src/Helper.cpp \
 		../src/ProgramHandler.cpp \
 		../src/FileHandler.cpp
 QMAKE_TARGET  = qtstart
@@ -299,8 +303,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../qtstart/mainwindow.h ../inc/ProgramHandler.h ../inc/FileHandler.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../qtstart/main.cpp ../qtstart/mainwindow.cpp ../src/ProgramHandler.cpp ../src/FileHandler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../qtstart/mainwindow.h ../inc/Helper.h ../inc/ProgramHandler.h ../inc/FileHandler.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../qtstart/main.cpp ../qtstart/mainwindow.cpp ../src/Helper.cpp ../src/ProgramHandler.cpp ../src/FileHandler.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../qtstart/mainwindow.ui $(DISTDIR)/
 
 
@@ -328,6 +332,7 @@ compiler_moc_header_make_all: moc_mainwindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp
 moc_mainwindow.cpp: ../inc/ProgramHandler.h \
+		../inc/Helper.h \
 		../inc/FileHandler.h \
 		../qtstart/mainwindow.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/piotrek/Desktop/weather/qtstart -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../qtstart/mainwindow.h -o moc_mainwindow.cpp
@@ -352,15 +357,21 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 
 main.o: ../qtstart/main.cpp ../qtstart/mainwindow.h \
 		../inc/ProgramHandler.h \
+		../inc/Helper.h \
 		../inc/FileHandler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../qtstart/main.cpp
 
 mainwindow.o: ../qtstart/mainwindow.cpp ../qtstart/mainwindow.h \
 		../inc/ProgramHandler.h \
+		../inc/Helper.h \
 		../inc/FileHandler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../qtstart/mainwindow.cpp
 
-ProgramHandler.o: ../src/ProgramHandler.cpp ../inc/ProgramHandler.h
+Helper.o: ../src/Helper.cpp ../inc/Helper.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Helper.o ../src/Helper.cpp
+
+ProgramHandler.o: ../src/ProgramHandler.cpp ../inc/ProgramHandler.h \
+		../inc/Helper.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ProgramHandler.o ../src/ProgramHandler.cpp
 
 FileHandler.o: ../src/FileHandler.cpp ../inc/FileHandler.h
