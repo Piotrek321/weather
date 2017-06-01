@@ -29,6 +29,8 @@ private:
     QPushButton *exitButton;
     QPushButton *compileButton;
     QPushButton *okButton;
+    QPushButton *cleanButton;
+
 
     QLabel *label;
     ProgramHandler * progHandler;
@@ -53,6 +55,7 @@ private slots:
     void compile();
     void getData();
     void restart();
+    void clean();
 
 };
 

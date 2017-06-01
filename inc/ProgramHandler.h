@@ -22,6 +22,7 @@ class ProgramHandler
 		virtual void stop(); 
 		virtual std::string exec(const char* cmd);
 		virtual void runMakefile();
+        virtual void cleanMakefile();
         virtual bool isProgramRunning();
         virtual ~ProgramHandler(){std::cout <<"~ProgramHandler" << std::flush;};
         ProgramHandler(std::string programName) : m_programName(programName){};

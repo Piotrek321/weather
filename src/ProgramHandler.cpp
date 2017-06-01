@@ -79,3 +79,7 @@ void ProgramHandler::runMakefile()
 	exec("make -C ../");
 }
 
+void ProgramHandler::cleanMakefile()
+{
+    exec("make clean -C ../");
+}

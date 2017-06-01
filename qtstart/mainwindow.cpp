@@ -2,6 +2,10 @@
 
 #include <QApplication>
 
+#define ButtonWitdth 30
+
+#define ButtonLength 100
+
 MainWindow::MainWindow()
 {
     QTextCodec::codecForName ("UTF-8");
@@ -12,23 +16,24 @@ MainWindow::MainWindow()
     label->setGeometry(5, 15, 150, 30);
 
     compileButton = new QPushButton(tr("&Compile"), this);
-    compileButton->setGeometry(150, 75, 100, 30);
+    compileButton->setGeometry(0, 0, ButtonLength, ButtonWitdth);
 
     okButton = new QPushButton(tr("&Ok"), this);
-    okButton->setGeometry(200, 100, 100, 30);
-    okButton->setDefault(true);
-    okButton->setAutoDefault(false);
+    okButton->setGeometry(300, 210, ButtonLength, ButtonWitdth);
 
-    shortcut = new QShortcut(QKeySequence(Qt::Key_Return), this);
+    cleanButton= new QPushButton(tr("&Clean"), this);
+    cleanButton->setGeometry(0, 60, ButtonLength, ButtonWitdth);
 
     restartButton = new QPushButton(tr("&Restart"), this);
-    restartButton->setGeometry(5, 105, 100, 30);
+    restartButton->setGeometry(0, 90, ButtonLength, ButtonWitdth);
 
     exitButton = new QPushButton(tr("&Exit"), this);
-    exitButton->setGeometry(5, 75, 100, 30);
+    exitButton->setGeometry(0, 120, ButtonLength, ButtonWitdth);
 
     startButton = new QPushButton(tr("&Start"), this);
-    startButton->setGeometry(5, 45, 100, 30);
+    startButton->setGeometry(0, 150, ButtonLength, ButtonWitdth);
+
+    shortcut = new QShortcut(QKeySequence(Qt::Key_Return), this);
 
     connect(restartButton, SIGNAL(clicked()), this, SLOT(restart()));
     connect(okButton, SIGNAL(clicked()), this, SLOT(getData()));
@@ -36,6 +41,8 @@ MainWindow::MainWindow()
     connect(startButton, SIGNAL(clicked()), this, SLOT(runApp()));
     connect(compileButton, SIGNAL(clicked()), this, SLOT(compile()));
     connect(shortcut, SIGNAL(activated()), this, SLOT(getData()));
+    connect(cleanButton, SIGNAL(clicked()), this, SLOT(clean()));
+
 
     lnEdit = new QLineEdit(this);
     lnEdit->setGeometry(200,200,100,50);
@@ -67,6 +74,12 @@ void MainWindow::getData()
   str = lnEdit->text();
   std::cout <<str.toStdString() <<std::flush;
   cityName = lnEdit->text().toStdString();
+}
+
+void MainWindow::clean()
+{
+  std::cout <<"Make clean\n" <<std::flush;
+  progHandler->cleanMakefile();
 }
 
 void MainWindow::compile()
