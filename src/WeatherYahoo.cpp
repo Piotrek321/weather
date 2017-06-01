@@ -11,32 +11,3 @@ std::string WeatherYahoo::getTemperature(std::string cityName)
   return sendHttpRequest(yahooQuery , "query.results.channel.item.condition.temp", ss);
 		//std::cout << getTemperatureFromJSON(ss, "query.created");
 }
-
-//To be removed
-std::string WeatherYahoo::getCityID(std::string cityName)
-{	
-	if(cityName == "")
-	{
-		std::cout << "Give city name and countr (exceptional)\n";
-		std::cin >> cityName;
-	}
-	char buff[512];
-	std::string cwd = getcwd(NULL, 0); //memory leaks?
-	std::string filename = "python " + cwd + "/pythonGetCityWoeid.py " + cityName;
-	FILE * output;
-
-  if(!(output =  popen(filename.c_str(), "r")))
-	{
-		std::cout <<"Can't open file\n";
-    return "";
-	}
-   while(fgets(buff, sizeof(buff), output)!=NULL)
-	{}
-
-	std::string woeid (buff);
-	std::cout << "City woeid: " << woeid << "\n";
-	if(strcmp(woeid.c_str(), "None\n")==0) std::cout <<"City not found\n";
-  putCityIntoMap(cityName, woeid);
-	pclose(output);
-	return woeid;
-}

@@ -16,19 +16,17 @@ class ProgramHandler
 {
 
 	public:
-        std::string m_programName;
-        virtual int startApp(bool doYouWantToWaitForChild =0);
+     std::string m_programName;
+    virtual int startApp(bool doYouWantToWaitForChild =0);
 		virtual int performRestart();
 		virtual void stop(); 
 		virtual std::string exec(const char* cmd);
 		virtual void runMakefile();
-        virtual void cleanMakefile();
-        virtual bool isProgramRunning();
-        virtual ~ProgramHandler(){std::cout <<"~ProgramHandler" << std::flush;};
-        ProgramHandler(std::string programName) : m_programName(programName){};
-        pid_t child_pid;
-       // ProgramHandler(std::string programName) : m_programName(programName) {};
-
+    virtual void cleanMakefile();
+    virtual bool isProgramRunning();
+    virtual ~ProgramHandler(){std::cout <<"~ProgramHandler" << std::flush;};
+    ProgramHandler(std::string programName) : m_programName(programName){};
+    pid_t child_pid;
 };
 
 #endif

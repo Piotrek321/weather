@@ -1,11 +1,11 @@
 #ifndef FileHandler_H_
 #define FileHandler_H_
 
-
 #include <iostream>
 #include <sys/stat.h>
 #include <fstream>
 #include <vector>
+
 class FileHandler
 {
 
@@ -22,8 +22,8 @@ class FileHandler
 
 		void createFile();		
 		void removeFile();		
-	static bool doesFileExist(const std::string& name, bool printInfo=1);
-	std::string readFileToString();
+		static bool doesFileExist(const std::string& name, bool printInfo=1);
+		std::string readFileToString();
 	protected:
 	  std::fstream fileHnd;
 		int numberOfCurrentLine;
