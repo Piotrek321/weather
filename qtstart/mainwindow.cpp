@@ -6,6 +6,24 @@
 
 #define ButtonLength 100
 
+bool compilationFinished = false;
+bool compilationStarted = false;
+
+class myThread: public QThread
+{
+public:
+    void run()
+    {  compilationStarted = true;
+        ProgramHandler::runMakefile();
+        std::cout <<"Compilation completed\n" <<std::flush;
+        compilationFinished = true;
+        compilationStarted = false;
+
+
+    }
+
+};
+
 MainWindow::MainWindow()
 {
     QTextCodec::codecForName ("UTF-8");
@@ -35,6 +53,8 @@ MainWindow::MainWindow()
 
     shortcut = new QShortcut(QKeySequence(Qt::Key_Return), this);
 
+    t = new myThread;
+
     connect(restartButton, SIGNAL(clicked()), this, SLOT(restart()));
     connect(okButton, SIGNAL(clicked()), this, SLOT(getData()));
     connect(exitButton, SIGNAL(clicked()), qApp, SLOT(quit()));
@@ -58,7 +78,7 @@ void MainWindow::restart()
    std::cout <<"PID: " << Helper::getPID("prog") <<std::flush;
   if(pid != 0)
   {
-      std::cout <<"Restart of process with PID: " << pid <<std::flush;
+      std::cout <<"Restart of process with PID: " << pid <<"\n"<<std::flush;
       kill(pid, SIGTERM );
       progHandler->performRestart();
   }
@@ -79,30 +99,34 @@ void MainWindow::getData()
 void MainWindow::clean()
 {
   std::cout <<"Make clean\n" <<std::flush;
-  progHandler->cleanMakefile();
+  compilationFinished = false;
+  ProgramHandler::cleanMakefile();
 }
 
 void MainWindow::compile()
 {
   std::cout <<"Compilation started\n" <<std::flush;
-  progHandler->runMakefile();
-  std::cout <<"Compilation completed\n" <<std::flush;
+
+  t->start();
 }
 
 void MainWindow::runApp()
 {
-  std::cout <<"RunApp\n" << std::flush;
-  if(!FileHandler::doesFileExist("../prog", 0))
+  if(compilationFinished)
   {
-    compile();
-  }
-  if(progHandler->isProgramRunning())
+      if(progHandler->isProgramRunning())
+      {
+        std::cout <<"Program: " << "../prog"  << " is already running\n" <<std::flush;
+      }
+      else
+      {
+        std::cout <<"RunApp\n" <<std::flush;
+        progHandler->startApp();
+      }
+  }else
   {
-    std::cout <<"Program: " << "../prog"  << " is already running" <<std::flush;
-  }
-  else
-  {
-    progHandler->startApp();
+      if(compilationStarted) std::cout <<"Compilation started but not finished.\n" <<std::flush;
+      else std::cout <<"Press compile button.\n" <<std::flush;
   }
 }
 

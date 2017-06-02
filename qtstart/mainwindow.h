@@ -18,7 +18,9 @@
 #include "../inc/ProgramHandler.h"
 #include "../inc/FileHandler.h"
 #include "../inc/Helper.h"
-
+#include <QThread>
+#include <QDebug>
+class myThread;
 class MainWindow : public QMainWindow
 {
 Q_OBJECT
@@ -30,7 +32,7 @@ private:
     QPushButton *compileButton;
     QPushButton *okButton;
     QPushButton *cleanButton;
-
+    myThread * t;
 
     QLabel *label;
     ProgramHandler * progHandler;
@@ -47,7 +49,7 @@ public:
     MainWindow();
     ~MainWindow()
     {
-       delete progHandler;
+        delete progHandler;
     }
 
 private slots:

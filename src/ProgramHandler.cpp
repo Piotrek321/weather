@@ -50,7 +50,7 @@ void ProgramHandler::stop()
 }
 
 
-std::string ProgramHandler::exec(const char* cmd)
+std::string ProgramHandler::exec(const char* cmd, bool printOutput = 0)
 {
 	char buffer[128];
 	std::string result = "";
@@ -63,6 +63,10 @@ std::string ProgramHandler::exec(const char* cmd)
     	if (fgets(buffer, 128, pipe) != NULL)
       {
 				result += buffer;
+                if(printOutput)
+                {
+                    std::cout << buffer <<std::flush;
+                }
       }
 		}
   } catch (...) {
@@ -76,7 +80,7 @@ std::string ProgramHandler::exec(const char* cmd)
 
 void ProgramHandler::runMakefile()
 {
-	exec("make -C ../");
+    exec("make -C ../", 1);
 }
 
 void ProgramHandler::cleanMakefile()
