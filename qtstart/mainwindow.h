@@ -20,6 +20,8 @@
 #include "../inc/Helper.h"
 #include <QThread>
 #include <QDebug>
+#include <signal.h>
+#include <errno.h>
 class myThread;
 class MainWindow : public QMainWindow
 {
@@ -58,6 +60,7 @@ private slots:
     void getData();
     void restart();
     void clean();
+    void exit();
 
 };
 

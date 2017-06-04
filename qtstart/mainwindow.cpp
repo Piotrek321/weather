@@ -57,7 +57,7 @@ MainWindow::MainWindow()
 
     connect(restartButton, SIGNAL(clicked()), this, SLOT(restart()));
     connect(okButton, SIGNAL(clicked()), this, SLOT(getData()));
-    connect(exitButton, SIGNAL(clicked()), qApp, SLOT(quit()));
+    connect(exitButton, SIGNAL(clicked()), this, SLOT(exit()));
     connect(startButton, SIGNAL(clicked()), this, SLOT(runApp()));
     connect(compileButton, SIGNAL(clicked()), this, SLOT(compile()));
     connect(shortcut, SIGNAL(activated()), this, SLOT(getData()));
@@ -70,6 +70,12 @@ MainWindow::MainWindow()
 
     setMinimumSize(200, 200);
     resize(480, 320);
+}
+void MainWindow::exit()
+{
+  this->restart();
+  qApp->quit();
+
 }
 
 void MainWindow::restart()
@@ -94,6 +100,12 @@ void MainWindow::getData()
   str = lnEdit->text();
   std::cout <<str.toStdString() <<std::flush;
   cityName = lnEdit->text().toStdString();
+  union sigval value;
+  value.sival_int = long("lodz");
+  if(sigqueue(Helper::getPID("prog"), SIGINT,  value))
+  {
+    std::cout << strerror(errno) << std::flush;
+  }
 }
 
 void MainWindow::clean()

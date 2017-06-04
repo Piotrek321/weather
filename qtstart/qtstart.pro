@@ -16,14 +16,11 @@ SOURCES += main.cpp\
         mainwindow.cpp\
         ../src/Helper.cpp\
         ../src/ProgramHandler.cpp\
-        ../src/FileHandler.cpp \
-    idlethread.cpp
-
+        ../src/FileHandler.cpp
 
 HEADERS  += mainwindow.h\
          ../inc/Helper.h\
          ../inc/ProgramHandler.h\
-         ../inc/FileHandler.h \
-    idlethread.h
+         ../inc/FileHandler.h
 
 FORMS    += mainwindow.ui
