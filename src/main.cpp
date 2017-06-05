@@ -2,22 +2,28 @@
 #include "../inc/Plotter.h"
 #include "../inc/WeatherOWM.h"
 #include "../inc/WeatherYahoo.h"
+#include "../inc/Messaginghandler.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdlib>
 #include <cstdio>
+
+
+#define MSGSZ     128
+
 bool isResetCalled = false;
 void  SIGTERM_handler(int sig);
 static void
 handler(int sig, siginfo_t *si, void *ucontext)
 {
-std::string zz;
-
-  std::cout <<  std::to_string(si->si_value.sival_int) << " \n" << std::flush;
-
+ MessagingHandler client("client");
+std::cout << client.receiveMessage() <<std::endl;
 }
+
 int main()
 {
+
 	Plotter y;
 	y.init();
 	WeatherAPI * b = new WeatherOWM;
@@ -45,7 +51,9 @@ int main()
 
 	c->printTemperature("lodz");
 	while(isResetCalled != true)
-	{}
+	{
+
+}
 delete b;
 delete c;
 exit(3);
@@ -60,5 +68,6 @@ void  SIGTERM_handler(int sig)
 	isResetCalled =true;
   //exit(3);
 }
+
 
 

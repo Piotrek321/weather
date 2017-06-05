@@ -22,6 +22,9 @@
 #include <QDebug>
 #include <signal.h>
 #include <errno.h>
+#include "../inc/Messaginghandler.h"
+
+
 class myThread;
 class MainWindow : public QMainWindow
 {
@@ -42,7 +45,7 @@ private:
     QAction *quitAction;
     QLineEdit * lnEdit;
     QShortcut * shortcut;
-
+ MessagingHandler * messagingHandlerServer;
     std::string cityName;
     void createMenus();
     void createStatusBar();
@@ -61,6 +64,8 @@ private slots:
     void restart();
     void clean();
     void exit();
+    void lineChanged(const QString &txt);
+
 
 };
 

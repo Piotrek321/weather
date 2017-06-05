@@ -18,14 +18,13 @@ public:
         std::cout <<"Compilation completed\n" <<std::flush;
         compilationFinished = true;
         compilationStarted = false;
-
-
     }
-
 };
 
 MainWindow::MainWindow()
 {
+
+  messagingHandlerServer = new MessagingHandler("server");
     QTextCodec::codecForName ("UTF-8");
     progHandler = new ProgramHandler("../prog");
    //createMenus();
@@ -54,7 +53,9 @@ MainWindow::MainWindow()
     shortcut = new QShortcut(QKeySequence(Qt::Key_Return), this);
 
     t = new myThread;
-
+    lnEdit = new QLineEdit(this);
+    lnEdit->setGeometry(200,200,100,50);
+    lnEdit->setText("Hello my id");
     connect(restartButton, SIGNAL(clicked()), this, SLOT(restart()));
     connect(okButton, SIGNAL(clicked()), this, SLOT(getData()));
     connect(exitButton, SIGNAL(clicked()), this, SLOT(exit()));
@@ -63,10 +64,8 @@ MainWindow::MainWindow()
     connect(shortcut, SIGNAL(activated()), this, SLOT(getData()));
     connect(cleanButton, SIGNAL(clicked()), this, SLOT(clean()));
 
+    connect(lnEdit, SIGNAL(textChanged( const QString &)), this, SLOT(lineChanged(const QString &)));
 
-    lnEdit = new QLineEdit(this);
-    lnEdit->setGeometry(200,200,100,50);
-    lnEdit->setText("Hello my id");
 
     setMinimumSize(200, 200);
     resize(480, 320);
@@ -76,6 +75,15 @@ void MainWindow::exit()
   this->restart();
   qApp->quit();
 
+}
+void MainWindow::lineChanged(const QString &txt)
+{
+std::cout <<"XXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
+QString str;
+str = lnEdit->text();
+//std::cout <<str.toStdString() <<std::flush;
+cityName = lnEdit->text().toStdString();
+std::cout <<cityName <<std::endl;
 }
 
 void MainWindow::restart()
@@ -98,14 +106,14 @@ void MainWindow::getData()
 {
   QString str;
   str = lnEdit->text();
-  std::cout <<str.toStdString() <<std::flush;
+  //std::cout <<str.toStdString() <<std::flush;
   cityName = lnEdit->text().toStdString();
-  union sigval value;
-  value.sival_int = long("lodz");
-  if(sigqueue(Helper::getPID("prog"), SIGINT,  value))
+union sigval xxx;
+  if(sigqueue(Helper::getPID("prog"), SIGINT,  xxx))
   {
     std::cout << strerror(errno) << std::flush;
   }
+    messagingHandlerServer->sendMessage(cityName);
 }
 
 void MainWindow::clean()
