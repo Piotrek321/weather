@@ -5,7 +5,7 @@ LD = g++
 # Compiler flags go here.
 CFLAGS = -g -Wall -std=c++11
 # Libraries
-LIBS = -lcurl -l json -lboost_iostreams -lboost_system
+LIBS = -lcurl -l json -lboost_iostreams -lboost_system -lrt
 # use this command to erase files.
 RM = /bin/rm -f
 # path to src files

@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <cstdlib>
 #include <cstdio>
-
-
+#include <mqueue.h>
+bool IS = false;
 #define MSGSZ     128
 
 bool isResetCalled = false;
@@ -17,13 +17,24 @@ void  SIGTERM_handler(int sig);
 static void
 handler(int sig, siginfo_t *si, void *ucontext)
 {
- MessagingHandler client("client");
-std::cout << client.receiveMessage() <<std::endl;
+IS = true;
+ //MessagingHandler client("client");
+//std::cout << client.receiveMessage() <<std::endl;
 }
 
 int main()
 {
+    mqd_t messageQueueHandler;
 
+ struct mq_attr attr;
+       attr.mq_maxmsg = 10;
+       attr.mq_msgsize = 20;
+
+    messageQueueHandler= mq_open("/myqueue", O_RDWR|O_CREAT, 0655, &attr);
+ if(messageQueueHandler == -1)
+    {
+        std::cout <<"Mq_open went wrong" <<std::endl;
+    }
 	Plotter y;
 	y.init();
 	WeatherAPI * b = new WeatherOWM;
@@ -45,17 +56,33 @@ int main()
 	std::string x = "Lodz";
 		std::cout <<"START\n" <<std::flush;
 	//TODO: handle wrong city name ??
-	b->printTemperature("zxczxcsdvasdgsdfbdsfvds");
+	//b->printTemperature("zxczxcsdvasdgsdfbdsfvds");
 
 	b->printTemperature("London");
 
 	c->printTemperature("lodz");
-	while(isResetCalled != true)
+
+while(isResetCalled != true)
+{
+	if(IS)
 	{
+		char * message = new char [100];
+		 if( mq_receive(messageQueueHandler, message, 100, 0) == -1)
+			{
+		 std::cout <<"Oh dear, something went wrong with read()!"  << strerror(errno)<< std::endl;
+		}else
+		{std::cout <<"\nAL: " << message <<std::endl;}
+	delete [] message;
+	}
+sleep(1);
+
+
 
 }
 delete b;
 delete c;
+ std::cout <<"main close: " <<  mq_close(messageQueueHandler)<<std::flush;
+ std::cout <<"main close: " << mq_unlink("/myqueue")<<std::flush;
 exit(3);
 	return 1;
 }

@@ -23,8 +23,16 @@ public:
 
 MainWindow::MainWindow()
 {
+    struct mq_attr attr;
+       attr.mq_maxmsg = 10;
+       attr.mq_msgsize = 20;
 
-  messagingHandlerServer = new MessagingHandler("server");
+    messageQueueHandler= mq_open("/myqueue", O_WRONLY|O_CREAT, 0655, &attr);
+    if(messageQueueHandler == -1)
+    {
+        std::cout <<"Mq_open went wrong" <<std::endl;
+    }
+    messagingHandlerServer = new MessagingHandler("server");
     QTextCodec::codecForName ("UTF-8");
     progHandler = new ProgramHandler("../prog");
    //createMenus();
@@ -72,7 +80,11 @@ MainWindow::MainWindow()
 }
 void MainWindow::exit()
 {
+  std::cout <<"qtcreator close: " <<   mq_close(messageQueueHandler) <<std::flush;
+   std::cout <<"qtcreator mq_unlink: " <<  mq_unlink("/myqueue")<<std::flush;
+   std::cout <<"PID: " << Helper::getPID("prog") <<std::flush;
   this->restart();
+std::cout <<"RESTART\n" <<std::flush;
   qApp->quit();
 
 }
@@ -93,7 +105,7 @@ void MainWindow::restart()
   if(pid != 0)
   {
       std::cout <<"Restart of process with PID: " << pid <<"\n"<<std::flush;
-      kill(pid, SIGTERM );
+      std:: cout <<"KILL: " << kill(pid, SIGTERM )<<std::flush;
       progHandler->performRestart();
   }
   else
@@ -108,12 +120,14 @@ void MainWindow::getData()
   str = lnEdit->text();
   //std::cout <<str.toStdString() <<std::flush;
   cityName = lnEdit->text().toStdString();
-union sigval xxx;
+/*union sigval xxx;
   if(sigqueue(Helper::getPID("prog"), SIGINT,  xxx))
   {
     std::cout << strerror(errno) << std::flush;
   }
-    messagingHandlerServer->sendMessage(cityName);
+    messagingHandlerServer->sendMessage(cityName);*/
+  std::string toSend = "WITAM";
+  mq_send(messageQueueHandler,toSend.c_str(), toSend.length(), 0);
 }
 
 void MainWindow::clean()

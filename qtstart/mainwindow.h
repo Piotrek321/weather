@@ -23,7 +23,7 @@
 #include <signal.h>
 #include <errno.h>
 #include "../inc/Messaginghandler.h"
-
+#include <mqueue.h>
 
 class myThread;
 class MainWindow : public QMainWindow
@@ -45,7 +45,8 @@ private:
     QAction *quitAction;
     QLineEdit * lnEdit;
     QShortcut * shortcut;
- MessagingHandler * messagingHandlerServer;
+    MessagingHandler * messagingHandlerServer;
+    mqd_t messageQueueHandler;
     std::string cityName;
     void createMenus();
     void createStatusBar();

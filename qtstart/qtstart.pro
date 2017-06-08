@@ -10,17 +10,19 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = qtstart
 TEMPLATE = app
-
+LIBS +=  -lrt
 
 SOURCES += main.cpp\
         mainwindow.cpp\
         ../src/Helper.cpp\
         ../src/ProgramHandler.cpp\
-        ../src/FileHandler.cpp
+        ../src/FileHandler.cpp \
+        ../src/MessagingHandler.cpp
 
 HEADERS  += mainwindow.h\
          ../inc/Helper.h\
          ../inc/ProgramHandler.h\
-         ../inc/FileHandler.h
+         ../inc/FileHandler.h \
+         ../inc/MessagingHandler.h
 
 FORMS    += mainwindow.ui
