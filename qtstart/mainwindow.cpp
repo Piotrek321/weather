@@ -72,7 +72,7 @@ MainWindow::MainWindow()
     connect(shortcut, SIGNAL(activated()), this, SLOT(getData()));
     connect(cleanButton, SIGNAL(clicked()), this, SLOT(clean()));
 
-    connect(lnEdit, SIGNAL(textChanged( const QString &)), this, SLOT(lineChanged(const QString &)));
+    //connect(lnEdit, SIGNAL(textChanged( const QString &)), this, SLOT(lineChanged(const QString &)));
 
 
     setMinimumSize(200, 200);
@@ -80,54 +80,33 @@ MainWindow::MainWindow()
 }
 void MainWindow::exit()
 {
-  std::cout <<"qtcreator close: " <<   mq_close(messageQueueHandler) <<std::flush;
-   std::cout <<"qtcreator mq_unlink: " <<  mq_unlink("/myqueue")<<std::flush;
-   std::cout <<"PID: " << Helper::getPID("prog") <<std::flush;
+  mq_close(messageQueueHandler);
+  mq_unlink("/myqueue");
   this->restart();
-std::cout <<"RESTART\n" <<std::flush;
   qApp->quit();
 
-}
-void MainWindow::lineChanged(const QString &txt)
-{
-std::cout <<"XXXXXXXXXXXXXXXXXXXXXXXX" << std::endl;
-QString str;
-str = lnEdit->text();
-//std::cout <<str.toStdString() <<std::flush;
-cityName = lnEdit->text().toStdString();
-std::cout <<cityName <<std::endl;
 }
 
 void MainWindow::restart()
 {
   pid_t pid =  Helper::getPID("prog");
-   std::cout <<"PID: " << Helper::getPID("prog") <<std::flush;
   if(pid != 0)
   {
-      std::cout <<"Restart of process with PID: " << pid <<"\n"<<std::flush;
-      std:: cout <<"KILL: " << kill(pid, SIGTERM )<<std::flush;
-      progHandler->performRestart();
+    std::cout <<"Restart of process with PID: " << pid <<"\n"<<std::flush;
+    kill(pid, SIGTERM );
+    progHandler->performRestart();
   }
   else
   {
-      std::cout <<"Process does not exists\n" << std::flush;
+    std::cout <<"Process does not exists\n" << std::flush;
   }
 }
 
 void MainWindow::getData()
 {
-  QString str;
-  str = lnEdit->text();
-  //std::cout <<str.toStdString() <<std::flush;
   cityName = lnEdit->text().toStdString();
-/*union sigval xxx;
-  if(sigqueue(Helper::getPID("prog"), SIGINT,  xxx))
-  {
-    std::cout << strerror(errno) << std::flush;
-  }
-    messagingHandlerServer->sendMessage(cityName);*/
-  std::string toSend = "WITAM";
-  mq_send(messageQueueHandler,toSend.c_str(), toSend.length(), 0);
+
+  mq_send(messageQueueHandler,cityName.c_str(), cityName.length(), 0);
 }
 
 void MainWindow::clean()
@@ -146,35 +125,35 @@ void MainWindow::compile()
 
 void MainWindow::runApp()
 {
-  if(compilationFinished)
+  if(compilationFinished || FileHandler::doesFileExist("../prog", 0))
   {
-      if(progHandler->isProgramRunning())
-      {
-        std::cout <<"Program: " << "../prog"  << " is already running\n" <<std::flush;
-      }
-      else
-      {
-        std::cout <<"RunApp\n" <<std::flush;
-        progHandler->startApp();
-      }
+    if(progHandler->isProgramRunning())
+    {
+       std::cout <<"Program: " << "../prog"  << " is already running\n" <<std::flush;
+    }
+    else
+    {
+      std::cout <<"RunApp\n" <<std::flush;
+      progHandler->startApp();
+    }
   }else
   {
-      if(compilationStarted) std::cout <<"Compilation started but not finished.\n" <<std::flush;
-      else std::cout <<"Press compile button.\n" <<std::flush;
+    if(compilationStarted) std::cout <<"Compilation started but not finished.\n" <<std::flush;
+    else std::cout <<"Press compile button.\n" <<std::flush;
   }
 }
 
 void MainWindow::createMenus()
 {
-    menu = menuBar()->addMenu(tr("&Plik"));
+  menu = menuBar()->addMenu(tr("&Plik"));
 
-    quitAction = new QAction(tr("&Wyjście"), this);
-    quitAction->setStatusTip(tr("Wyjdź z programu."));
-    connect (quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-    menu->addAction(quitAction);
+  quitAction = new QAction(tr("&Wyjście"), this);
+  quitAction->setStatusTip(tr("Wyjdź z programu."));
+  connect (quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+  menu->addAction(quitAction);
 }
 
 void MainWindow::createStatusBar()
 {
-    statusBar()->showMessage(tr("Gotowy"));
+  statusBar()->showMessage(tr("Gotowy"));
 }

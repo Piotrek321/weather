@@ -36,7 +36,7 @@ DISTNAME      = qtstart1.0.0
 DISTDIR = /home/piotrek/Desktop/weather/build-qtstart-Desktop-Debug/.tmp/qtstart1.0.0
 LINK          = g++
 LFLAGS        = -m64
-LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lrt -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -52,12 +52,14 @@ SOURCES       = ../qtstart/main.cpp \
 		../qtstart/mainwindow.cpp \
 		../src/Helper.cpp \
 		../src/ProgramHandler.cpp \
-		../src/FileHandler.cpp moc_mainwindow.cpp
+		../src/FileHandler.cpp \
+		../src/Messaginghandler.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		Helper.o \
 		ProgramHandler.o \
 		FileHandler.o \
+		Messaginghandler.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -87,10 +89,6 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_platformsupport_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qml.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmltest.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quick.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickwidgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib.pri \
@@ -123,11 +121,13 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../qtstart/qtstart.pro ../qtstart/mainwindow.h \
 		../inc/Helper.h \
 		../inc/ProgramHandler.h \
-		../inc/FileHandler.h ../qtstart/main.cpp \
+		../inc/FileHandler.h \
+		../inc/Messaginghandler.h ../qtstart/main.cpp \
 		../qtstart/mainwindow.cpp \
 		../src/Helper.cpp \
 		../src/ProgramHandler.cpp \
-		../src/FileHandler.cpp
+		../src/FileHandler.cpp \
+		../src/Messaginghandler.cpp
 QMAKE_TARGET  = qtstart
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = qtstart
@@ -186,10 +186,6 @@ Makefile: ../qtstart/qtstart.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_platformsupport_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport_private.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qml.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmltest.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quick.pri \
-		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickwidgets.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib.pri \
@@ -252,10 +248,6 @@ Makefile: ../qtstart/qtstart.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_platformsupport_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_printsupport_private.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qml.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_qmltest.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quick.pri:
-/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_quickwidgets.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_testlib.pri:
@@ -303,8 +295,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../qtstart/mainwindow.h ../inc/Helper.h ../inc/ProgramHandler.h ../inc/FileHandler.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../qtstart/main.cpp ../qtstart/mainwindow.cpp ../src/Helper.cpp ../src/ProgramHandler.cpp ../src/FileHandler.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../qtstart/mainwindow.h ../inc/Helper.h ../inc/ProgramHandler.h ../inc/FileHandler.h ../inc/Messaginghandler.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../qtstart/main.cpp ../qtstart/mainwindow.cpp ../src/Helper.cpp ../src/ProgramHandler.cpp ../src/FileHandler.cpp ../src/Messaginghandler.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../qtstart/mainwindow.ui $(DISTDIR)/
 
 
@@ -334,6 +326,7 @@ compiler_moc_header_clean:
 moc_mainwindow.cpp: ../inc/ProgramHandler.h \
 		../inc/Helper.h \
 		../inc/FileHandler.h \
+		../inc/Messaginghandler.h \
 		../qtstart/mainwindow.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/piotrek/Desktop/weather/qtstart -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../qtstart/mainwindow.h -o moc_mainwindow.cpp
 
@@ -358,13 +351,15 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 main.o: ../qtstart/main.cpp ../qtstart/mainwindow.h \
 		../inc/ProgramHandler.h \
 		../inc/Helper.h \
-		../inc/FileHandler.h
+		../inc/FileHandler.h \
+		../inc/Messaginghandler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../qtstart/main.cpp
 
 mainwindow.o: ../qtstart/mainwindow.cpp ../qtstart/mainwindow.h \
 		../inc/ProgramHandler.h \
 		../inc/Helper.h \
-		../inc/FileHandler.h
+		../inc/FileHandler.h \
+		../inc/Messaginghandler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../qtstart/mainwindow.cpp
 
 Helper.o: ../src/Helper.cpp ../inc/Helper.h
@@ -376,6 +371,9 @@ ProgramHandler.o: ../src/ProgramHandler.cpp ../inc/ProgramHandler.h \
 
 FileHandler.o: ../src/FileHandler.cpp ../inc/FileHandler.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o FileHandler.o ../src/FileHandler.cpp
+
+Messaginghandler.o: ../src/Messaginghandler.cpp ../inc/Messaginghandler.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Messaginghandler.o ../src/Messaginghandler.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

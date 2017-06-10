@@ -1,5 +1,5 @@
 #include "../inc/WeatherGeneral.h"	
-
+#include <exception>
 std::string WeatherGeneral::sendHttpRequest(std::string httpQuery , const char * getElement, std::stringstream &ss)
 {
 	std::string data ;
@@ -14,6 +14,7 @@ std::string WeatherGeneral::sendHttpRequest(std::string httpQuery , const char *
 		curl_easy_perform(crl);
 		curl_easy_cleanup(crl);
 		ss <<data;
+		
 		return getTemperatureFromJSON(ss, getElement);
 	}
 	return "";
@@ -21,15 +22,17 @@ std::string WeatherGeneral::sendHttpRequest(std::string httpQuery , const char *
 
 void WeatherGeneral::printTemperature(std::string cityName)
 {
-  std::string temperature = getTemperature(cityName);
+				
+	std::string temperature = getTemperature(cityName);
+   
 	if(temperature == "") return ;
   std::cout <<"Temperature from " << m_appName << ". City: " << cityName << " temperature: " << temperature << "\n" << std::flush;
 }
 
 size_t WeatherGeneral::write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
-    ((std::string*)userdata)->append((char*)ptr, size * nmemb);
-    return size * nmemb;
+	((std::string*)userdata)->append((char*)ptr, size * nmemb);
+  return size * nmemb;
 }
 
 std::stringstream WeatherGeneral::getCurrentDate()
@@ -78,9 +81,17 @@ void WeatherGeneral::putCityIntoMap(std::string cityName , std::string id)
 
 std::string WeatherGeneral::getTemperatureFromJSON(std::stringstream &jsonData, const char * getElement)
 {
-  boost::property_tree::ptree pt;
-  boost::property_tree::read_json(jsonData, pt);
-  return pt.get<std::string>(getElement);
+	try
+	{
+		boost::property_tree::ptree pt;
+		boost::property_tree::read_json(jsonData, pt);
+		return pt.get<std::string>(getElement);
+	}
+ 	catch (std::exception const& e)
+  {
+  	std::cerr << e.what() << std::endl;
+		return "";
+  }
 }
 
 

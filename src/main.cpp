@@ -1,4 +1,3 @@
-
 #include "../inc/Plotter.h"
 #include "../inc/WeatherOWM.h"
 #include "../inc/WeatherYahoo.h"
@@ -9,81 +8,59 @@
 #include <cstdlib>
 #include <cstdio>
 #include <mqueue.h>
-bool IS = false;
+
 #define MSGSZ     128
 
 bool isResetCalled = false;
 void  SIGTERM_handler(int sig);
-static void
-handler(int sig, siginfo_t *si, void *ucontext)
-{
-IS = true;
- //MessagingHandler client("client");
-//std::cout << client.receiveMessage() <<std::endl;
-}
 
 int main()
 {
-    mqd_t messageQueueHandler;
+	mqd_t messageQueueHandler;
 
- struct mq_attr attr;
-       attr.mq_maxmsg = 10;
-       attr.mq_msgsize = 20;
+	struct mq_attr attr;
+	attr.mq_maxmsg = 10;
+	attr.mq_msgsize = 20;
 
-    messageQueueHandler= mq_open("/myqueue", O_RDWR|O_CREAT, 0655, &attr);
- if(messageQueueHandler == -1)
-    {
-        std::cout <<"Mq_open went wrong" <<std::endl;
-    }
+	messageQueueHandler= mq_open("/myqueue", O_RDWR | O_NONBLOCK, 0655, &attr);
+	if(messageQueueHandler == -1)
+  {
+  	std::cout <<"Mq_open went wrong" <<std::endl;
+  }
 	Plotter y;
 	y.init();
 	WeatherAPI * b = new WeatherOWM;
 	WeatherAPI * c= new WeatherYahoo;
+/*
   struct sigaction sigac;
   sigemptyset(&sigac.sa_mask);
   sigac.sa_sigaction = handler;
   sigac.sa_flags = SA_SIGINFO;
-
-
   sigaction(SIGINT, &sigac, NULL);
-
+*/
 
   if(signal(SIGTERM, SIGTERM_handler) == SIG_ERR) 
   {
      printf("SIGTERM install error\n");
      exit(1);
   }
-	std::string x = "Lodz";
-		std::cout <<"START\n" <<std::flush;
-	//TODO: handle wrong city name ??
-	//b->printTemperature("zxczxcsdvasdgsdfbdsfvds");
 
-	b->printTemperature("London");
-
-	c->printTemperature("lodz");
-
-while(isResetCalled != true)
-{
-	if(IS)
+	while(isResetCalled != true)
 	{
 		char * message = new char [100];
-		 if( mq_receive(messageQueueHandler, message, 100, 0) == -1)
-			{
-		 std::cout <<"Oh dear, something went wrong with read()!"  << strerror(errno)<< std::endl;
-		}else
-		{std::cout <<"\nAL: " << message <<std::endl;}
-	delete [] message;
+		if( mq_receive(messageQueueHandler, message, 100, NULL) != -1)
+		{
+			c->printTemperature(message);
+			b->printTemperature(message);
+		}
+		delete [] message;
+		sleep(1);
 	}
-sleep(1);
-
-
-
-}
-delete b;
-delete c;
- std::cout <<"main close: " <<  mq_close(messageQueueHandler)<<std::flush;
- std::cout <<"main close: " << mq_unlink("/myqueue")<<std::flush;
-exit(3);
+	delete b;
+	delete c;
+  mq_close(messageQueueHandler);
+  mq_unlink("/myqueue");
+	exit(3);
 	return 1;
 }
 

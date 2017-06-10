@@ -52,26 +52,28 @@ void ProgramHandler::stop()
 
 std::string ProgramHandler::exec(const char* cmd, bool printOutput = 0)
 {
-	char buffer[128];
-	std::string result = "";
+  char buffer[128];
+  std::string result = "";
   FILE* pipe = popen(cmd, "r");
   if (!pipe) throw std::runtime_error("popen() failed!");
   try 
-	{
+  {
   	while (!feof(pipe)) 
-		{
-    	if (fgets(buffer, 128, pipe) != NULL)
+    {
+      if (fgets(buffer, 128, pipe) != NULL)
       {
-				result += buffer;
-                if(printOutput)
-                {
-                    std::cout << buffer <<std::flush;
-                }
+        result += buffer;
+        if(printOutput)
+        {
+          std::cout << buffer <<std::flush;
+        }
       }
-		}
-  } catch (...) {
-      pclose(pipe);
-      throw;
+    }
+  }
+  catch (std::exception const& e)
+  {
+    pclose(pipe);
+    throw;
   }
   pclose(pipe);
   return result;
