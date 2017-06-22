@@ -9,35 +9,28 @@
 #include <cstdio>
 #include <mqueue.h>
 
-#define MSGSZ     128
+#define MSGSIZE 300
 
 bool isResetCalled = false;
 void  SIGTERM_handler(int sig);
 
 int main()
 {
-	mqd_t messageQueueHandler;
+  mqd_t messageQueueHandler;
 
-	struct mq_attr attr;
-	attr.mq_maxmsg = 10;
-	attr.mq_msgsize = 20;
+  struct mq_attr attr;
+    attr.mq_maxmsg = 10;
+    attr.mq_msgsize = MSGSIZE;
 
-	messageQueueHandler= mq_open("/myqueue", O_RDWR | O_NONBLOCK, 0655, &attr);
-	if(messageQueueHandler == -1)
+  messageQueueHandler= mq_open("/myqueue", O_RDWR | O_NONBLOCK, 0655, &attr);
+  if(messageQueueHandler == -1)
   {
-  	std::cout <<"Mq_open went wrong" <<std::endl;
+    std::cout <<"Mq_open went wrong\n" << strerror(errno) <<std::endl;
   }
-	Plotter y;
-	y.init();
-	WeatherAPI * b = new WeatherOWM;
-	WeatherAPI * c= new WeatherYahoo;
-/*
-  struct sigaction sigac;
-  sigemptyset(&sigac.sa_mask);
-  sigac.sa_sigaction = handler;
-  sigac.sa_flags = SA_SIGINFO;
-  sigaction(SIGINT, &sigac, NULL);
-*/
+  Plotter y;
+  y.init();
+  WeatherAPI * b = new WeatherOWM;
+  WeatherAPI * c= new WeatherYahoo;
 
   if(signal(SIGTERM, SIGTERM_handler) == SIG_ERR) 
   {
@@ -45,10 +38,10 @@ int main()
      exit(1);
   }
 
-	while(isResetCalled != true)
-	{
-		char * message = new char [100];
-		if( mq_receive(messageQueueHandler, message, 100, NULL) != -1)
+  while(isResetCalled != true)
+  {
+    char * message = new char [MSGSIZE];
+		if( mq_receive(messageQueueHandler, message, MSGSIZE, NULL) != -1)
 		{
 			c->printTemperature(message);
 			b->printTemperature(message);
@@ -58,20 +51,13 @@ int main()
 	}
 	delete b;
 	delete c;
-  //std::cout << mq_close(messageQueueHandler) << std::endl;
-  //mq_unlink("/myqueue");
-	exit(3);
+
 	return 1;
 }
 
-
-
-void  SIGTERM_handler(int sig)
+void SIGTERM_handler(int sig)
 {
-  printf("From SIGQUIT: just got a %d (SIGQUIT ^\\) signal and is about to quit\n", sig);
+  printf("SIGTERM signal number: %d \n", sig);
 	isResetCalled =true;
-  //exit(3);
+  exit(3);
 }
-
-
-
