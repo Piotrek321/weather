@@ -64,7 +64,7 @@ private slots:
     void getData();
     void restart();
     void clean();
-    void exitApp();
+    void exit();
     //void lineChanged(const QString &txt);
 
 

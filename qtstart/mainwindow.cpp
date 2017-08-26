@@ -5,7 +5,6 @@
 #define ButtonWitdth 30
 
 #define ButtonLength 100
-#define MSGSIZE 300
 
 bool compilationFinished = false;
 bool compilationStarted = false;
@@ -31,7 +30,7 @@ MainWindow::MainWindow()
    messageQueueHandler= mq_open("/myqueue", O_WRONLY|O_CREAT, 0655, &attr);
     if(messageQueueHandler == -1)
     {
-     std::cout <<"MainWindow. Mq_open went wrong\n" << strerror(errno) <<std::endl;
+     std::cout <<"Mq_open went wrong22" <<std::endl;
     }
     messagingHandlerServer = new MessagingHandler("server");
     QTextCodec::codecForName ("UTF-8");
@@ -67,7 +66,7 @@ MainWindow::MainWindow()
     lnEdit->setText("Hello my id");
     connect(restartButton, SIGNAL(clicked()), this, SLOT(restart()));
     connect(okButton, SIGNAL(clicked()), this, SLOT(getData()));
-    connect(exitButton, SIGNAL(clicked()), this, SLOT(exitApp()));
+    connect(exitButton, SIGNAL(clicked()), this, SLOT(exit()));
     connect(startButton, SIGNAL(clicked()), this, SLOT(runApp()));
     connect(compileButton, SIGNAL(clicked()), this, SLOT(compile()));
     connect(shortcut, SIGNAL(activated()), this, SLOT(getData()));
@@ -79,7 +78,7 @@ MainWindow::MainWindow()
     setMinimumSize(200, 200);
     resize(480, 320);
 }
-void MainWindow::exitApp()
+void MainWindow::exit()
 {
   mq_close(messageQueueHandler);
   mq_unlink("/myqueue");
