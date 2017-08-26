@@ -10,6 +10,7 @@
 #include <mqueue.h>
 
 #define MSGSIZE 300
+#define MSGSZ     128
 
 bool isResetCalled = false;
 void  SIGTERM_handler(int sig);
@@ -51,7 +52,8 @@ int main()
 	}
 	delete b;
 	delete c;
-
+  mq_close(messageQueueHandler);
+  mq_unlink("/myqueue");
 	return 1;
 }
 

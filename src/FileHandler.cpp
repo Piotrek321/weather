@@ -59,6 +59,6 @@
 				return line;
 			}
 		}
-		std::cout << "\n" << data << " was not found in " << fileName << std::endl;
+		std::cout << "\n" << data << " was not found in " << fileName << "\n";
 		return "";
 	};

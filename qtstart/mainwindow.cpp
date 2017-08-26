@@ -9,7 +9,7 @@
 
 bool compilationFinished = false;
 bool compilationStarted = false;
-bool isRestart =false;
+
 class myThread: public QThread
 {
 public:
@@ -24,16 +24,16 @@ public:
 
 MainWindow::MainWindow()
 {
-  struct mq_attr attr;
-     attr.mq_maxmsg = 10;
-     attr.mq_msgsize = MSGSIZE;
-   messageQueueHandler= mq_open("/myqueue", O_WRONLY|O_CREAT , 0655, &attr);
-   if(messageQueueHandler == -1)
-   {
-     std::cout <<"MainWindow. Mq_open went wrong\n" << strerror(errno) <<std::endl;
-   }
+    struct mq_attr attr;
+       attr.mq_maxmsg = 10;
+     attr.mq_msgsize = 20;
 
-    //messagingHandlerServer = new MessagingHandler("server");
+   messageQueueHandler= mq_open("/myqueue", O_WRONLY|O_CREAT, 0655, &attr);
+    if(messageQueueHandler == -1)
+    {
+     std::cout <<"MainWindow. Mq_open went wrong\n" << strerror(errno) <<std::endl;
+    }
+    messagingHandlerServer = new MessagingHandler("server");
     QTextCodec::codecForName ("UTF-8");
     progHandler = new ProgramHandler("../prog");
    //createMenus();
@@ -64,7 +64,7 @@ MainWindow::MainWindow()
     t = new myThread;
     lnEdit = new QLineEdit(this);
     lnEdit->setGeometry(200,200,100,50);
-    lnEdit->setText("lodz");
+    lnEdit->setText("Hello my id");
     connect(restartButton, SIGNAL(clicked()), this, SLOT(restart()));
     connect(okButton, SIGNAL(clicked()), this, SLOT(getData()));
     connect(exitButton, SIGNAL(clicked()), this, SLOT(exitApp()));
@@ -81,27 +81,25 @@ MainWindow::MainWindow()
 }
 void MainWindow::exitApp()
 {
- /* mq_close(messageQueueHandler);
-  mq_unlink("/myqueue");*/
-  progHandler->stop();
-  delete progHandler;
+  mq_close(messageQueueHandler);
+  mq_unlink("/myqueue");
+  this->restart();
   qApp->quit();
 
 }
 
 void MainWindow::restart()
 {
-  if(progHandler->performRestart() == -1)
+  pid_t pid =  Helper::getPID("prog");
+  if(pid != 0)
   {
-    std::cout <<"Restart went wrong" << std::endl;
+    std::cout <<"Restart of process with PID: " << pid <<"\n"<<std::flush;
+    kill(pid, SIGTERM );
+    progHandler->performRestart();
   }
   else
   {
-    //mq_close(messageQueueHandler);
-    //mq_unlink("/myqueue");
-    isRestart = true;
-    this->runApp();
-    std::cout <<"Restart was successful" << std::endl;
+    std::cout <<"Process does not exists\n" << std::flush;
   }
 }
 
@@ -130,10 +128,15 @@ void MainWindow::runApp()
 {
   if(compilationFinished || FileHandler::doesFileExist("../prog", 0))
   {
-     std::cout <<"RunApp\n" <<std::flush;
-     if(!isRestart) progHandler->startApp();
-     isRestart = false;
-
+    if(progHandler->isProgramRunning())
+    {
+       std::cout <<"Program: " << "../prog"  << " is already running\n" <<std::flush;
+    }
+    else
+    {
+      std::cout <<"RunApp\n" <<std::flush;
+      progHandler->startApp();
+    }
   }else
   {
     if(compilationStarted) std::cout <<"Compilation started but not finished.\n" <<std::flush;
