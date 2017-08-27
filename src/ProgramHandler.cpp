@@ -3,6 +3,12 @@
 
 int ProgramHandler::startApp(bool doYouWantToWaitForChild)
 {
+  if(this->isProgramRunning())
+  {
+     std::cout <<"Program: " << "../prog"  << " is already running\n" <<std::flush;
+  }
+  else
+  {
     pid_t pid = fork();
     int statval;
 
@@ -26,8 +32,9 @@ int ProgramHandler::startApp(bool doYouWantToWaitForChild)
         else
           printf("Child did not terminate with exit\n");
       }
-
+      child_pid = Helper::getPID(m_programName);
     }
+  }
     return 1;
 }
 
@@ -36,17 +43,42 @@ bool ProgramHandler::isProgramRunning()
   return Helper::getPID(m_programName) ? 1 : 0;
 }
 
-
 int ProgramHandler::performRestart()
 {
- waitpid(Helper::getPID(m_programName), 0, 0);
- return 1;
+  return performRestart(child_pid);
+}
+
+int ProgramHandler::performRestart(pid_t pid )
+{
+  int result;
+  if(pid != 0)
+  {
+    std::cout <<"Restart of process with PID: " << pid <<"\n"<<std::flush;
+
+    result = stop(pid);
+    if(result != -1)
+    {
+      child_pid = -1;
+      startApp();
+    }
+  }else
+  {
+    std::cout <<"Process does not exists\n" << std::flush;
+    result = -1;
+  }
+ return result;
+}
+
+int ProgramHandler::stop(pid_t pid)
+{
+  kill(pid, SIGTERM );
+  return waitpid(pid, 0, 0);
 }
 
 void ProgramHandler::stop()
 {
-
- return;
+  if(child_pid == 0) return;
+  stop(child_pid);
 }
 
 

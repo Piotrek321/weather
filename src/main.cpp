@@ -10,7 +10,6 @@
 #include <mqueue.h>
 
 #define MSGSZ     128
-#define MSGSZ     128
 
 bool isResetCalled = false;
 void  SIGTERM_handler(int sig);
@@ -59,8 +58,8 @@ int main()
 	}
 	delete b;
 	delete c;
-  mq_close(messageQueueHandler);
-  mq_unlink("/myqueue");
+  //std::cout << mq_close(messageQueueHandler) << std::endl;
+  //mq_unlink("/myqueue");
 	exit(3);
 	return 1;
 }

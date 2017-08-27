@@ -8,7 +8,7 @@
 
 bool compilationFinished = false;
 bool compilationStarted = false;
-
+bool isRestart =false;
 class myThread: public QThread
 {
 public:
@@ -23,16 +23,15 @@ public:
 
 MainWindow::MainWindow()
 {
-    struct mq_attr attr;
-       attr.mq_maxmsg = 10;
+  struct mq_attr attr;
+     attr.mq_maxmsg = 10;
      attr.mq_msgsize = 20;
-
    messageQueueHandler= mq_open("/myqueue", O_WRONLY|O_CREAT, 0655, &attr);
-    if(messageQueueHandler == -1)
-    {
+   if(messageQueueHandler == -1)
+   {
      std::cout <<"Mq_open went wrong22" <<std::endl;
-    }
-    messagingHandlerServer = new MessagingHandler("server");
+   }
+    //messagingHandlerServer = new MessagingHandler("server");
     QTextCodec::codecForName ("UTF-8");
     progHandler = new ProgramHandler("../prog");
    //createMenus();
@@ -63,7 +62,7 @@ MainWindow::MainWindow()
     t = new myThread;
     lnEdit = new QLineEdit(this);
     lnEdit->setGeometry(200,200,100,50);
-    lnEdit->setText("Hello my id");
+    lnEdit->setText("lodz");
     connect(restartButton, SIGNAL(clicked()), this, SLOT(restart()));
     connect(okButton, SIGNAL(clicked()), this, SLOT(getData()));
     connect(exitButton, SIGNAL(clicked()), this, SLOT(exit()));
@@ -80,25 +79,27 @@ MainWindow::MainWindow()
 }
 void MainWindow::exit()
 {
-  mq_close(messageQueueHandler);
-  mq_unlink("/myqueue");
-  this->restart();
+ /* mq_close(messageQueueHandler);
+  mq_unlink("/myqueue");*/
+  progHandler->stop();
+  delete progHandler;
   qApp->quit();
 
 }
 
 void MainWindow::restart()
 {
-  pid_t pid =  Helper::getPID("prog");
-  if(pid != 0)
+  if(progHandler->performRestart() == -1)
   {
-    std::cout <<"Restart of process with PID: " << pid <<"\n"<<std::flush;
-    kill(pid, SIGTERM );
-    progHandler->performRestart();
+    std::cout <<"Restart went wrong" << std::endl;
   }
   else
   {
-    std::cout <<"Process does not exists\n" << std::flush;
+    //mq_close(messageQueueHandler);
+    //mq_unlink("/myqueue");
+    isRestart = true;
+    this->runApp();
+    std::cout <<"Restart was successful" << std::endl;
   }
 }
 
@@ -127,15 +128,10 @@ void MainWindow::runApp()
 {
   if(compilationFinished || FileHandler::doesFileExist("../prog", 0))
   {
-    if(progHandler->isProgramRunning())
-    {
-       std::cout <<"Program: " << "../prog"  << " is already running\n" <<std::flush;
-    }
-    else
-    {
-      std::cout <<"RunApp\n" <<std::flush;
-      progHandler->startApp();
-    }
+     std::cout <<"RunApp\n" <<std::flush;
+     if(!isRestart) progHandler->startApp();
+     isRestart = false;
+
   }else
   {
     if(compilationStarted) std::cout <<"Compilation started but not finished.\n" <<std::flush;
