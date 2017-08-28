@@ -2,7 +2,7 @@
 
 pid_t Helper::getPID(std::string processName)	
 {
-	char buf[512];
+	/*char buf[512];
 	std::string prName("pidof -s ");
 	prName += processName;
 	FILE *cmd_pipe = popen(prName.c_str(), "r");
@@ -11,5 +11,64 @@ pid_t Helper::getPID(std::string processName)
 	pid_t pid = strtoul(buf, NULL, 10);
 
 	pclose( cmd_pipe );  
-	return pid;
+        std::cout <<"PID: " << pid <<std::endl;
+	return pid;*/
+
+    FILE *pf;
+    char command[20];
+    char data[512];
+    pid_t pid = 0;
+    std::string grep = "ps aux |grep ";
+    grep += processName;
+    // Execute a process listing
+    sprintf(command, grep.c_str()); 
+
+    // Setup our pipe for reading and execute our command.
+    pf = popen(command,"r"); 
+
+    // Error handling
+
+    // Get the data from the process execution
+    fgets(data, 512 , pf);
+
+    // the data is now in 'data'
+    
+    if (pclose(pf) != 0)
+        fprintf(stderr," Error: Failed to close command stream \n");
+  std::string output (data);
+	std::size_t found = output.find(grep);
+	if (found==std::string::npos)
+	{
+		//std::cout << "**found==std::string::npos" << std::endl;
+    //std::cout <<"DATA: " << data << "\n";  
+		int firstIndex=0, lastIndex=0;
+    bool isFirst = true;
+		for(int i=0;i<output.size();i++)
+		{
+			if(isdigit(output[i]))
+			{
+				if(isFirst)
+				{
+					isFirst = false;
+					firstIndex = i;
+				}
+				if(output[i+1] == ' ') 
+				{
+					lastIndex = i;
+					break;
+				}
+				//std::cout <<"xxx\n";
+			}
+		}
+		//std::cout <<"First: " << output[firstIndex] << " last: " << output[lastIndex] << std::endl;
+		std::string str = output.substr(firstIndex, lastIndex-firstIndex+1);
+	 // std::cout <<"str:" << str << "xx"<<std::endl;
+   // std::cout <<"int: " << std::stoi(str) << std::endl;
+// std::cout <<"int+1: " << std::stoi(str)+1 << std::endl;
+    pid = std::stoi(str);
+	}
+
+    return pid;
+
+
 }

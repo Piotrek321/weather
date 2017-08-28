@@ -6,6 +6,7 @@ int ProgramHandler::startApp(bool doYouWantToWaitForChild)
   if(this->isProgramRunning())
   {
      std::cout <<"Program: " << "../prog"  << " is already running\n" <<std::flush;
+     return 0;
   }
   else
   {
@@ -20,7 +21,7 @@ int ProgramHandler::startApp(bool doYouWantToWaitForChild)
     else if(pid <0)
     {
         std::cerr <<"Failed to fork\n";
-        exit(1);
+        return 0;
     }
     else //Parent
     {
@@ -31,6 +32,7 @@ int ProgramHandler::startApp(bool doYouWantToWaitForChild)
           printf("Child's exit code %d\n", WEXITSTATUS(statval));
         else
           printf("Child did not terminate with exit\n");
+          //return 0;
       }
       child_pid = Helper::getPID(m_programName);
     }

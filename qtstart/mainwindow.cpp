@@ -25,7 +25,7 @@ MainWindow::MainWindow()
 {
   struct mq_attr attr;
      attr.mq_maxmsg = 10;
-     attr.mq_msgsize = 20;
+     attr.mq_msgsize = 30;
    messageQueueHandler= mq_open("/myqueue", O_WRONLY|O_CREAT, 0655, &attr);
    if(messageQueueHandler == -1)
    {
