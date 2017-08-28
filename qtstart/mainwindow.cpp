@@ -13,7 +13,8 @@ class myThread: public QThread
 {
 public:
     void run()
-    {  compilationStarted = true;
+    {
+        compilationStarted = true;
         ProgramHandler::runMakefile();
         std::cout <<"Compilation completed\n" <<std::flush;
         compilationFinished = true;
@@ -29,11 +30,11 @@ MainWindow::MainWindow()
    messageQueueHandler= mq_open("/myqueue", O_WRONLY|O_CREAT, 0655, &attr);
    if(messageQueueHandler == -1)
    {
-     std::cout <<"Mq_open went wrong22" <<std::endl;
+     std::cout <<"Mq_open went wrong" <<std::endl;
    }
     //messagingHandlerServer = new MessagingHandler("server");
     QTextCodec::codecForName ("UTF-8");
-    progHandler = new ProgramHandler("../prog");
+    progHandler = std::make_shared<ProgramHandler>("../prog");
    //createMenus();
    // createStatusBar();
     label = new QLabel(tr("Weather forecast"), this);
@@ -82,7 +83,6 @@ void MainWindow::exit()
  /* mq_close(messageQueueHandler);
   mq_unlink("/myqueue");*/
   progHandler->stop();
-  delete progHandler;
   qApp->quit();
 
 }

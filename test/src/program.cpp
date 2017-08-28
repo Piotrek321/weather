@@ -36,7 +36,7 @@ int main()
 
 void  SIGTERM_handler(int sig)
 {
-  printf("From SIGQUIT: just got a %d (SIGQUIT ^\\) signal and is about to quit\n", sig);
+  std::cout <<"Signal to restart program received" << std::endl;
 	isResetCalled =true;
   //exit(3);
 }

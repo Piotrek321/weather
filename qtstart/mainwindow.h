@@ -40,7 +40,7 @@ private:
     myThread * t;
 
     QLabel *label;
-    ProgramHandler * progHandler;
+    std::shared_ptr<ProgramHandler> progHandler;
     QMenu *menu;
     QAction *quitAction;
     QLineEdit * lnEdit;
@@ -54,9 +54,7 @@ private:
 public:
     MainWindow();
     ~MainWindow()
-    {
-        delete progHandler;
-    }
+    {}
 
 private slots:
     void runApp();
