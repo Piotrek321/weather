@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <fstream>
 #include <vector>
+#include <unistd.h>
 
 class FileHandler
 {
@@ -15,7 +16,6 @@ class FileHandler
 
 		~FileHandler();
 		bool openFile(); //TODO options
-    bool writeLineToFile();
 
 		std::string findLineWithData(std::string data);
 		bool readFile();

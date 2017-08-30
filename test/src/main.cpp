@@ -1,6 +1,34 @@
 #include <gtest/gtest.h>
- #include <math.h>
+#include <math.h>
 #include "../../inc/ProgramHandler.h"
+#include "../../inc/FileHandler.h"
+
+TEST(FileHandlerTest, OpenExistingFileTest) { 
+	FileHandler fh("fileForTest.txt");
+  ASSERT_TRUE(fh.openFile());
+}
+
+TEST(FileHandlerTest, OpenNonExistingFileTest) { 
+  FileHandler fh("fileDoesNotExist.txt");
+  ASSERT_FALSE(fh.openFile());
+}
+
+TEST(FileHandlerTest, ReadFromFileTest) { 
+	FileHandler fh("fileForTest.txt");
+  ASSERT_TRUE(fh.openFile());
+	std::string stringToCompare = "Testing123\nHello\n";
+	ASSERT_EQ(fh.readFileToString(), stringToCompare);
+}
+
+TEST(FileHandlerTest, CreateRemoveFileTest) { 
+	FileHandler fh("fileToBeCreated.txt");
+  ASSERT_FALSE(fh.doesFileExist("fileToBeCreated.txt", 1));
+  fh.createFile();
+
+  ASSERT_TRUE(fh.doesFileExist("fileToBeCreated.txt", 1));
+	fh.removeFile();
+  ASSERT_FALSE(fh.doesFileExist("fileToBeCreated.txt", 1));
+}
 
 TEST(ProgramHandlerTest, StartStopTest) { 
 

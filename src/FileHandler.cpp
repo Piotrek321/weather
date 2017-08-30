@@ -17,9 +17,15 @@
 		return 1;
 	};
 
+
+	void FileHandler::createFile()
+	{
+		fileHnd.open(fileName.c_str(), std::fstream::in | std::fstream::out | std::fstream::app);
+	}
+
 	void FileHandler::removeFile()
 	{
-		if( remove( fileName.c_str()) != 0 )
+		if( unlink( fileName.c_str()) != 0 )
 			perror( "Error deleting file" );
 		else
 			std::cout <<"File successfully deleted\n";
