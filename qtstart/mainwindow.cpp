@@ -24,17 +24,11 @@ public:
 
 MainWindow::MainWindow()
 {
-  struct mq_attr attr;
-     attr.mq_maxmsg = 10;
-     attr.mq_msgsize = 30;
-   messageQueueHandler= mq_open("/myqueue", O_WRONLY|O_CREAT, 0655, &attr);
-   if(messageQueueHandler == -1)
-   {
-     std::cout <<"Mq_open went wrong" <<std::endl;
-   }
-    //messagingHandlerServer = new MessagingHandler("server");
+
     QTextCodec::codecForName ("UTF-8");
     progHandler = std::make_shared<ProgramHandler>("../prog");
+    messagingHandler = std::make_shared<MessagingHandler>("/myqueue");
+
    //createMenus();
    // createStatusBar();
     label = new QLabel(tr("Weather forecast"), this);
@@ -106,8 +100,8 @@ void MainWindow::restart()
 void MainWindow::getData()
 {
   cityName = lnEdit->text().toStdString();
+  messagingHandler->sendMessage(cityName,0);
 
-  mq_send(messageQueueHandler,cityName.c_str(), cityName.length(), 0);
 }
 
 void MainWindow::clean()

@@ -17,12 +17,12 @@
 #include <iostream>
 #include "../inc/ProgramHandler.h"
 #include "../inc/FileHandler.h"
+#include "../inc/Messaginghandler.h"
 #include "../inc/Helper.h"
 #include <QThread>
 #include <QDebug>
 #include <signal.h>
 #include <errno.h>
-#include "../inc/Messaginghandler.h"
 #include <mqueue.h>
 
 class myThread;
@@ -40,12 +40,12 @@ private:
     myThread * t;
 
     QLabel *label;
+    std::shared_ptr<MessagingHandler> messagingHandler;
     std::shared_ptr<ProgramHandler> progHandler;
     QMenu *menu;
     QAction *quitAction;
     QLineEdit * lnEdit;
     QShortcut * shortcut;
-    MessagingHandler * messagingHandlerServer;
     mqd_t messageQueueHandler;
     std::string cityName;
     void createMenus();
