@@ -19,5 +19,5 @@ void MessagingHandler::sendMessage(std::string datatoSend, unsigned int priority
 }
 std::string MessagingHandler::receiveMessage()
 {
-   
+   return "";
 }
