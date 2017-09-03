@@ -14,7 +14,7 @@ void  SIGTERM_handler(int sig);
 
 int main()
 {
-	MessagingHandler messagingHandler("/myqueue", 0);
+	MessagingHandler messagingHandler("/myqueue");
 
 	Plotter y;
 	y.init();

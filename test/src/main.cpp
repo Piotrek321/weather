@@ -5,12 +5,35 @@
 #include "../../inc/Helper.h"
 #include "../../inc/MessagingHandler.h"
 
-TEST(MessagingHandlerTest, verifyPID)
+TEST(MessagingHandlerTest, sendReceiveMessage)
 {
-
-
+  ProgramHandler t1("./firtsProcess");
+	ASSERT_EQ(t1.startApp(), 1);
+  MessagingHandler mh("/queueTest");
+  std::string messageToSend = "messageToSend";
+  std::string messageToReceive;
+  mh.sendMessage(messageToSend,0);
+  while(!mh.receiveMessage(messageToReceive))
+  {
+	  ASSERT_EQ(messageToReceive, "messageToReceive");
+  }
+  t1.stop(); 
 }
 
+TEST(MessagingHandlerTest, sendReceiveMessageLongerThan100)
+{
+  ProgramHandler t1("./secondProcess");
+	ASSERT_EQ(t1.startApp(), 1);
+  MessagingHandler mh("/queueTest2");
+  std::string messageToSend = "321";
+  std::string messageToReceive;
+  mh.sendMessage(messageToSend,0);
+  while(!mh.receiveMessage(messageToReceive))
+  {
+	  ASSERT_EQ(messageToReceive, "123");
+  }
+  t1.stop(); 
+}
 
 TEST(HelperTest, verifyPID)
 {

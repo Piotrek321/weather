@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include <string>
 #include "../inc/Helper.h"
+#include "../inc/FileHandler.h"
 
 class ProgramHandler
 {

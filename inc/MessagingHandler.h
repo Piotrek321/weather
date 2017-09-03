@@ -14,7 +14,7 @@
 class MessagingHandler
 {
 public:
-    MessagingHandler(std::string serverOrClient, bool send);
+    MessagingHandler(std::string serverOrClient);
     void sendMessage(std::string datatoSend, unsigned int priority);
     bool receiveMessage(std::string &messageToReceive);
  		struct mq_attr attr;

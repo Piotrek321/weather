@@ -3,6 +3,10 @@
 
 int ProgramHandler::startApp(bool doYouWantToWaitForChild)
 {
+  if(!FileHandler::doesFileExist(this->m_programName))
+  {
+     return 0;
+  }
   if(this->isProgramRunning())
   {
      std::cout <<"Program: " << "../prog"  << " is already running\n" <<std::flush;
