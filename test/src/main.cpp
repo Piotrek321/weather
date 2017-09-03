@@ -3,6 +3,14 @@
 #include "../../inc/ProgramHandler.h"
 #include "../../inc/FileHandler.h"
 #include "../../inc/Helper.h"
+#include "../../inc/MessagingHandler.h"
+
+TEST(MessagingHandlerTest, verifyPID)
+{
+
+
+}
+
 
 TEST(HelperTest, verifyPID)
 {

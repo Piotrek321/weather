@@ -17,7 +17,7 @@
 #include <iostream>
 #include "../inc/ProgramHandler.h"
 #include "../inc/FileHandler.h"
-#include "../inc/Messaginghandler.h"
+#include "../inc/MessagingHandler.h"
 #include "../inc/Helper.h"
 #include <QThread>
 #include <QDebug>

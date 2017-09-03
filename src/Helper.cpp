@@ -21,7 +21,7 @@ pid_t Helper::getPID(std::string processName)
     std::string grep = "ps aux |grep ";
     grep += processName;
     // Execute a process listing
-    sprintf(command, grep.c_str()); 
+    strcpy(command, grep.c_str());
 
     // Setup our pipe for reading and execute our command.
     pf = popen(command,"r"); 
@@ -35,15 +35,13 @@ pid_t Helper::getPID(std::string processName)
     
     if (pclose(pf) != 0)
         fprintf(stderr," Error: Failed to close command stream \n");
-  std::string output (data);
+    std::string output (data);
 	std::size_t found = output.find(grep);
 	if (found==std::string::npos)
 	{
-		//std::cout << "**found==std::string::npos" << std::endl;
-    //std::cout <<"DATA: " << data << "\n";  
 		int firstIndex=0, lastIndex=0;
-    bool isFirst = true;
-		for(int i=0;i<output.size();i++)
+        bool isFirst = true;
+        for(unsigned int i=0;i<output.size();i++)
 		{
 			if(isdigit(output[i]))
 			{
@@ -57,14 +55,10 @@ pid_t Helper::getPID(std::string processName)
 					lastIndex = i;
 					break;
 				}
-				//std::cout <<"xxx\n";
 			}
 		}
-		//std::cout <<"First: " << output[firstIndex] << " last: " << output[lastIndex] << std::endl;
-		std::string str = output.substr(firstIndex, lastIndex-firstIndex+1);
-	 // std::cout <<"str:" << str << "xx"<<std::endl;
-   // std::cout <<"int: " << std::stoi(str) << std::endl;
-// std::cout <<"int+1: " << std::stoi(str)+1 << std::endl;
+    std::string str = output.substr(firstIndex, lastIndex-firstIndex+1);
+
     pid = std::stoi(str);
 	}
 

@@ -18,12 +18,13 @@ SOURCES += main.cpp\
         ../src/Helper.cpp\
         ../src/ProgramHandler.cpp\
         ../src/FileHandler.cpp \
-        ../src/Messaginghandler.cpp
+        ../src/MessagingHandler.cpp
 
 HEADERS  += mainwindow.h\
          ../inc/Helper.h\
          ../inc/ProgramHandler.h\
          ../inc/FileHandler.h \
-         ../inc/Messaginghandler.h
+         ../inc/Messaginghandler.h \
+         ../inc/MessagingHandler.h
 
 FORMS    += mainwindow.ui

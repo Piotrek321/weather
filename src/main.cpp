@@ -1,7 +1,7 @@
 #include "../inc/Plotter.h"
 #include "../inc/WeatherOWM.h"
 #include "../inc/WeatherYahoo.h"
-#include "../inc/Messaginghandler.h"
+#include "../inc/MessagingHandler.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,19 +9,13 @@
 #include <cstdio>
 #include <mqueue.h>
 
-#define MSGSZ     128
-
 bool isResetCalled = false;
 void  SIGTERM_handler(int sig);
 
 int main()
 {
-	//MessagingHandler messagingHandler("/myqueue", 0);
-mqd_t messageQueueHandler;
- 		struct mq_attr attr;
-   attr.mq_maxmsg = 10;
-   attr.mq_msgsize = 30;//TODO ZMIENIC NA KLASE KTORA Z JAKIEGOS POWODU NIE DZIALA????
-	messageQueueHandler= mq_open("/myqueue",  O_RDWR | O_NONBLOCK, 0655, &attr);
+	MessagingHandler messagingHandler("/myqueue", 0);
+
 	Plotter y;
 	y.init();
 	WeatherAPI * b = new WeatherOWM;
@@ -42,13 +36,18 @@ mqd_t messageQueueHandler;
 
 	while(isResetCalled != true)
 	{
-  	//std::string message;
-  char * message = new char [100];
-	if( mq_receive(messageQueueHandler, message, 100, NULL) != -1)
+  	std::string message;
+    if(messagingHandler.receiveMessage(message))
 		{
 			c->printTemperature(message);
 			b->printTemperature(message);
 		}
+  /*char * message = new char [100];
+	if( mq_receive(messagingHandler.messageQueueHandler, message, 100, NULL) != -1)
+		{
+			c->printTemperature(message);
+			b->printTemperature(message);
+		}*/
 		sleep(1);
 	}
 	delete b;

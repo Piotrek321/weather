@@ -7,7 +7,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
-#define MSGSZ     128
 /*
  * Declare the message structure.
  */
@@ -17,9 +16,10 @@ class MessagingHandler
 public:
     MessagingHandler(std::string serverOrClient, bool send);
     void sendMessage(std::string datatoSend, unsigned int priority);
-    bool receiveMessage(std::string messageToReceive);
+    bool receiveMessage(std::string &messageToReceive);
  		struct mq_attr attr;
-    mqd_t messageQueueHandler;
+    mqd_t messageQueueSender;
+    mqd_t messageQueueReceiver;
 
 
 };
