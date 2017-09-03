@@ -17,7 +17,10 @@
 		return 1;
 	};
 
-
+  void FileHandler::close()
+  {
+    fileHnd.close();
+  }
 	void FileHandler::createFile()
 	{
 		fileHnd.open(fileName.c_str(), std::fstream::in | std::fstream::out | std::fstream::app);

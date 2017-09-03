@@ -2,6 +2,25 @@
 #include <math.h>
 #include "../../inc/ProgramHandler.h"
 #include "../../inc/FileHandler.h"
+#include "../../inc/Helper.h"
+
+TEST(HelperTest, verifyPID)
+{
+	FileHandler fh("fileContainingPID.txt");
+  ProgramHandler t("./pid");
+	ASSERT_EQ(t.startApp(), 1);
+	pid_t pid = Helper::getPID("./pid");
+
+  t.stop();
+	ASSERT_TRUE(fh.doesFileExist("fileContainingPID.txt", 1));
+  std::string pid_s = fh.readFileToString();
+
+  fh.removeFile();
+
+  ASSERT_EQ(pid, atoi(pid_s.c_str()));
+  
+}
+
 
 TEST(FileHandlerTest, OpenExistingFileTest) { 
 	FileHandler fh("fileForTest.txt");

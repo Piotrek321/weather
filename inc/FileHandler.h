@@ -24,6 +24,7 @@ class FileHandler
 		void removeFile();		
 		static bool doesFileExist(const std::string& name, bool printInfo=1);
 		std::string readFileToString();
+    void close();
 	protected:
 	  std::fstream fileHnd;
 		int numberOfCurrentLine;
