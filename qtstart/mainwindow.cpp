@@ -27,7 +27,7 @@ MainWindow::MainWindow()
 
     QTextCodec::codecForName ("UTF-8");
     progHandler = std::make_shared<ProgramHandler>("../prog");
-    messagingHandler = std::make_shared<MessagingHandler>("/myqueue");
+    messagingHandler = std::make_shared<MessagingHandler>("/myqueue", 1);
 
    //createMenus();
    // createStatusBar();

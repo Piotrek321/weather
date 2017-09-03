@@ -16,17 +16,12 @@ void  SIGTERM_handler(int sig);
 
 int main()
 {
-	mqd_t messageQueueHandler;
-
-	struct mq_attr attr;
-	attr.mq_maxmsg = 10;
-	attr.mq_msgsize = 30;
-
-	messageQueueHandler= mq_open("/myqueue", O_RDWR | O_NONBLOCK, 0655, &attr);
-	if(messageQueueHandler == -1)
-  {
-  	std::cout <<"Mq_open went wrong" <<std::endl;
-  }
+	//MessagingHandler messagingHandler("/myqueue", 0);
+mqd_t messageQueueHandler;
+ 		struct mq_attr attr;
+   attr.mq_maxmsg = 10;
+   attr.mq_msgsize = 30;//TODO ZMIENIC NA KLASE KTORA Z JAKIEGOS POWODU NIE DZIALA????
+	messageQueueHandler= mq_open("/myqueue",  O_RDWR | O_NONBLOCK, 0655, &attr);
 	Plotter y;
 	y.init();
 	WeatherAPI * b = new WeatherOWM;
@@ -47,13 +42,13 @@ int main()
 
 	while(isResetCalled != true)
 	{
-		char * message = new char [100];
-		if( mq_receive(messageQueueHandler, message, 100, NULL) != -1)
+  	//std::string message;
+  char * message = new char [100];
+	if( mq_receive(messageQueueHandler, message, 100, NULL) != -1)
 		{
 			c->printTemperature(message);
 			b->printTemperature(message);
 		}
-		delete [] message;
 		sleep(1);
 	}
 	delete b;
