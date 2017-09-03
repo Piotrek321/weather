@@ -1,9 +1,7 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-
 #define ButtonWitdth 30
-
 #define ButtonLength 100
 
 bool compilationFinished = false;
@@ -24,7 +22,6 @@ public:
 
 MainWindow::MainWindow()
 {
-
     QTextCodec::codecForName ("UTF-8");
     progHandler = std::make_shared<ProgramHandler>("../prog");
     messagingHandler = std::make_shared<MessagingHandler>("/myqueue", 1);

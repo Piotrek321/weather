@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <mqueue.h>
 
+
 class myThread;
 class MainWindow : public QMainWindow
 {
