@@ -1,17 +1,15 @@
 Install Qtcreator:
+wget http://download.qt.io/official_releases/qt/5.9/5.9.1/qt-opensource-linux-x64-5.9.1.run 
+chmod +x qt-opensource-linux-x64-5.9.1.run 
+./qt-opensource-linux-x64-5.9.1.run 
 
-wget http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-5.7.0.run
-chmod +x qt-opensource-linux-x64-5.7.0.run
-./qt-opensource-linux-x64-5.7.0.run
 sudo apt-get install build-essential
 sudo apt-get install libfontconfig1
 sudo apt-get install mesa-common-dev
 sudo apt-get install libglu1-mesa-dev -y
 sudo apt-get update
 
-sudo apt-get install qtcreator
 
-sudo apt-get install qt5-default
 
 Install essentials:
 
@@ -25,4 +23,5 @@ sudo apt-get install libcurl4-openssl-dev
 Json:
 sudo apt-get install libjson0 libjson0-dev
 
-
+####sudo apt-get install qtcreator
+####sudo apt-get install qt5-default
