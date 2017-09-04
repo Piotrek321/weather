@@ -9,7 +9,7 @@ int ProgramHandler::startApp(bool doYouWantToWaitForChild)
   }
   if(this->isProgramRunning())
   {
-     std::cout <<"Program: " << "../prog"  << " is already running\n" <<std::flush;
+     std::cout <<"Program: " << m_programName  << " is already running\n" <<std::flush;
      return 0;
   }
   else
@@ -126,4 +126,12 @@ void ProgramHandler::runMakefile()
 void ProgramHandler::cleanMakefile()
 {
     exec("make clean -C ../");
+}
+
+ProgramHandler::~ProgramHandler()
+{
+  if(isProgramRunning())
+  {
+    stop();
+  }
 }

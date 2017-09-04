@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+ &#include <gtest/gtest.h>
 #include <math.h>
 #include "../../inc/ProgramHandler.h"
 #include "../../inc/FileHandler.h"

@@ -25,7 +25,7 @@ class ProgramHandler
     static void runMakefile();
     static void cleanMakefile();
     virtual bool isProgramRunning(); 
-    virtual ~ProgramHandler(){};
+    virtual ~ProgramHandler();
     ProgramHandler(std::string programName) : m_programName(programName){};
   private:
     std::string m_programName;

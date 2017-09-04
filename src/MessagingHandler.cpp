@@ -2,8 +2,8 @@
 //TODO add design pattern
 MessagingHandler::MessagingHandler(std::string queueName)
 {
-  attr.mq_maxmsg = 100;
-  attr.mq_msgsize = 200;
+  attr.mq_maxmsg = 10;
+  attr.mq_msgsize = 50;
   messageQueueSender= mq_open(queueName.c_str(), O_WRONLY|O_CREAT, 0655, &attr);
   if(messageQueueSender == -1)
   {
