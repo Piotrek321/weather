@@ -3,8 +3,6 @@ wget http://download.qt.io/official_releases/qt/5.9/5.9.1/qt-opensource-linux-x6
 chmod +x qt-opensource-linux-x64-5.9.1.run 
 ./qt-opensource-linux-x64-5.9.1.run 
 
-sudo apt-get install build-essential
-sudo apt-get install libfontconfig1
 sudo apt-get install mesa-common-dev
 sudo apt-get install libglu1-mesa-dev -y
 sudo apt-get update
