@@ -14,13 +14,16 @@
 class MessagingHandler
 {
 public:
-    MessagingHandler(std::string serverOrClient);
+    MessagingHandler(std::string serverOrClient, bool isThisMainQeueue=0);
     void sendMessage(std::string datatoSend, unsigned int priority);
     bool receiveMessage(std::string &messageToReceive);
- 		struct mq_attr attr;
+    ~MessagingHandler();
+private:
+    struct mq_attr attr;
+    std::string m_queueName;
+    mqd_t createdQueue;
     mqd_t messageQueueSender;
     mqd_t messageQueueReceiver;
-
 
 };
 

@@ -1,15 +1,15 @@
- &#include <gtest/gtest.h>
 #include <math.h>
 #include "../../inc/ProgramHandler.h"
 #include "../../inc/FileHandler.h"
 #include "../../inc/Helper.h"
 #include "../../inc/MessagingHandler.h"
+#include "gtest/gtest.h"
 
 TEST(MessagingHandlerTest, sendReceiveMessage)
 {
   ProgramHandler t1("./firtsProcess");
 	ASSERT_EQ(t1.startApp(), 1);
-  MessagingHandler mh("/queueTest");
+  MessagingHandler mh("/queueTest",1);
   std::string messageToSend = "messageToSend";
   std::string messageToReceive;
   mh.sendMessage(messageToSend,0);
@@ -24,7 +24,7 @@ TEST(MessagingHandlerTest, sendReceiveMessageLongerThan100)
 {
   ProgramHandler t1("./secondProcess");
 	ASSERT_EQ(t1.startApp(), 1);
-  MessagingHandler mh("/queueTest2");
+  MessagingHandler mh("/queueTest2",1);
   std::string messageToSend = "321";
   std::string messageToReceive;
   mh.sendMessage(messageToSend,0);

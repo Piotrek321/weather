@@ -14,8 +14,8 @@ void  SIGTERM_handler(int sig);
 
 int main()
 {
-	MessagingHandler messagingHandler("/myqueue");
-
+  
+MessagingHandler messagingHandler("/myqueue");
 	Plotter y;
 	y.init();
 	WeatherAPI * b = new WeatherOWM;
@@ -36,24 +36,23 @@ int main()
 
 	while(isResetCalled != true)
 	{
-  	std::string message;
-    if(messagingHandler.receiveMessage(message))
+
+		std::string message;
+		if(messagingHandler.receiveMessage(message))
 		{
 			c->printTemperature(message);
 			b->printTemperature(message);
 		}
-  /*char * message = new char [100];
-	if( mq_receive(messagingHandler.messageQueueHandler, message, 100, NULL) != -1)
+		else
 		{
-			c->printTemperature(message);
-			b->printTemperature(message);
-		}*/
+		  std::cout << "Error: " << strerror (errno) <<std::endl;
+		}
+
 		sleep(1);
 	}
 	delete b;
 	delete c;
-  //std::cout << mq_close(messageQueueHandler) << std::endl;
-  //mq_unlink("/myqueue");
+
 	exit(3);
 	return 1;
 }
@@ -64,7 +63,6 @@ void  SIGTERM_handler(int sig)
 {
   std::cout <<"Signal to restart program received" << std::endl;
 	isResetCalled =true;
-  //exit(3);
 }
 
 
