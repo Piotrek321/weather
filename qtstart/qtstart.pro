@@ -24,7 +24,6 @@ HEADERS  += mainwindow.h\
          ../inc/Helper.h\
          ../inc/ProgramHandler.h\
          ../inc/FileHandler.h \
-         ../inc/Messaginghandler.h \
          ../inc/MessagingHandler.h
 
 FORMS    += mainwindow.ui

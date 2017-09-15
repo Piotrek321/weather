@@ -9,13 +9,24 @@
 #include <cstdio>
 #include <mqueue.h>
 
+#define MSGSZ     128
+
 bool isResetCalled = false;
 void  SIGTERM_handler(int sig);
 
 int main()
 {
-  
-MessagingHandler messagingHandler("/myqueue");
+	mqd_t messageQueueHandler;
+
+	struct mq_attr attr;
+	attr.mq_maxmsg = 10;
+	attr.mq_msgsize = 30;
+
+	messageQueueHandler= mq_open("/myqueue", O_RDWR | O_NONBLOCK, 0655, &attr);
+	if(messageQueueHandler == -1)
+  {
+  	std::cout <<"Mq_open went wrong" <<std::endl;
+  }
 	Plotter y;
 	y.init();
 	WeatherAPI * b = new WeatherOWM;
@@ -36,23 +47,19 @@ MessagingHandler messagingHandler("/myqueue");
 
 	while(isResetCalled != true)
 	{
-
-		std::string message;
-		if(messagingHandler.receiveMessage(message))
+		char * message = new char [100];
+		if( mq_receive(messageQueueHandler, message, 100, NULL) != -1)
 		{
 			c->printTemperature(message);
 			b->printTemperature(message);
 		}
-		else
-		{
-		  std::cout << "Error: " << strerror (errno) <<std::endl;
-		}
-
+		delete [] message;
 		sleep(1);
 	}
 	delete b;
 	delete c;
-
+  //std::cout << mq_close(messageQueueHandler) << std::endl;
+  //mq_unlink("/myqueue");
 	exit(3);
 	return 1;
 }
@@ -63,6 +70,7 @@ void  SIGTERM_handler(int sig)
 {
   std::cout <<"Signal to restart program received" << std::endl;
 	isResetCalled =true;
+  //exit(3);
 }
 
 
