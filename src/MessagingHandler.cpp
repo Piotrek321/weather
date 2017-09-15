@@ -1,6 +1,6 @@
 #include "../inc/MessagingHandler.h"
 //TODO add design pattern
-MessagingHandler::MessagingHandler(std::string queueName)
+MessagingHandler::MessagingHandler(std::string queueName, bool a)
 {
    attr.mq_maxmsg = 10;
    attr.mq_msgsize = 30;

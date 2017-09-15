@@ -5,6 +5,29 @@
 #include "../../inc/MessagingHandler.h"
 #include "gtest/gtest.h"
 
+TEST(MessagingHandlerTest, sendReceivex2Message)
+{
+  ProgramHandler t1("./firtsProcess");
+	ASSERT_EQ(t1.startApp(), 1);
+  MessagingHandler mh("/queueTest",1);
+  std::string messageToSend = "messageToSend";
+  std::string messageToReceive;
+  mh.sendMessage(messageToSend,0);
+  while(!mh.receiveMessage(messageToReceive))
+  {
+	  ASSERT_EQ(messageToReceive, "messageToReceive");
+  }
+  messageToSend = "messageToSend2";
+  messageToReceive;
+  mh.sendMessage(messageToSend,0);
+  while(!mh.receiveMessage(messageToReceive))
+  {
+	  ASSERT_EQ(messageToReceive, "messageToReceive2");
+  }
+  t1.stop(); 
+}
+
+
 TEST(MessagingHandlerTest, sendReceiveMessage)
 {
   ProgramHandler t1("./firtsProcess");
